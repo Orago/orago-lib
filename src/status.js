@@ -33,7 +33,7 @@ export class Success extends StatusResponse {
 	}
 }
 
-export class Err extends StatusResponse {
+export class Error extends StatusResponse {
 	prototype = StatusResponse;
 
 	/** @type {false} */
@@ -55,127 +55,44 @@ export class Err extends StatusResponse {
 	}
 }
 
-//#region //* Custom Status *//
-/**
- * @template Type
- */
-class CustomSuccess extends StatusResponse {
-	/** @type {true} */
-	status = true;
-
-	/** @type {Type} */
-	data;
-
-	/**
-	 * @param {string} response
-	 * @param {Type} data
-	 */
-	constructor(response = 'Success!', data) {
-		super(response);
-
-		this.data = data;
-	}
-}
-
-/**
- * @template Type
- */
-class CustomErr extends StatusResponse {
-	/** @type {false} */
-	status = false;
-
-	/** @type {Type} */
-	data;
-
-	/**
-	 * @param {string} response
-	 * @param {Type} data 
-	 */
-	constructor(response = 'Error!', data) {
-		super(response);
-
-		this.data = data;
-	}
-}
-
-
 /**
  * @template Type
  */
 export class CustomStatus {
 	constructor() {
-		const Parent = this.parent = class Parent {
-			/** @type {boolean} */
-			status = false;
-
-			response = '';
-
-			/** @type {Type} */
-			data;
-
-			/**
-			 * 
-			 * @param {boolean} status 
-			 * @param {string} response 
-			 * @param {Type} data 
-			 */
-			constructor(status, response, data) {
-				this.status = status;
-				this.response = response;
-				this.data = data;
+		/**
+		 * @param {boolean} status
+		 * @param {string} response 
+		 * @param {Type} data 
+		 */
+		function _response (status, response = 'Any', data){
+			return {
+				status,
+				response,
+				data
 			}
-		};
+		}
 
-		this.Success = class extends Parent {
-			/**
-			 * @param {string} response
-			 * @param {Type} data
-			 */
-			constructor(response = 'Success!', data) {
-				super(true, response, data);
-			}
-		};
+		/** @type {ReturnType<_response>} */
+		this.out;
 
 		/**
-		 * @augments Parent<Type>
+		 * @param {string} response 
+		 * @param {Type} data 
 		 */
-		this.Err = class extends this.parent {
-			/** @type {false} */
-			status = false;
+		this.Success = function (response = 'Success', data){
+			return _response(true, response, data);
+		}
 
-			/** @type {Type} */
-			data;
-
-			/**
-			 * @param {string} response
-			 * @param {Type} data 
-			 */
-			constructor(response = 'Error!', data) {
-				super(response);
-
-				this.data = data;
-			}
+		/**
+		 * @param {string} response 
+		 * @param {Type} data 
+		 */
+		this.Error = function (response = 'Err', data){
+			return _response(false, response, data);
 		}
 	}
 }
-
-/**
- * @type {CustomStatus<{ name: string, alive: boolean }>}
- */
-const catStatus = new CustomStatus();
-
-
-const kitty1 = new catStatus.Success('Got cat', {
-	name: 'Mr. Meow Meow',
-	alive: true
-});
-
-const kitty2 = new catStatus.Err('Dead cat', {
-	name: 'Orea'
-});
-
-
-
 
 //#endregion //* Custom Status *//
 
@@ -184,5 +101,5 @@ export default class Status extends StatusResponse {
 	data = {};
 
 	static Success = Success;
-	static Err = Err;
+	static Error = Error;
 }

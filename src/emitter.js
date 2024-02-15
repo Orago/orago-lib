@@ -1,3 +1,4 @@
+
 export default class Emitter {
 	/** @type {Map<string, Array<Function>>} */
 	all = new Map();
@@ -13,18 +14,17 @@ export default class Emitter {
 
 	/**
 	 * Adds a listener
-	 * @param {string} type Event Name
+	 * @param {string} event Event Name
 	 * @param {Function} handler Callback
 	 * @returns {this}
 	 */
-	on(type, handler) {
-		const handlers = this.all.get(type);
+	on(event, handler) {
+		const handlers = this.all.get(event);
 
 		if (handlers) {
 			handlers.push(handler);
-		}
-		else {
-			this.all.set(type, [handler]);
+		} else {
+			this.all.set(event, [handler]);
 		}
 
 		return this;
@@ -32,12 +32,12 @@ export default class Emitter {
 
 	/**
 	 * disables a listener
-	 * @param {string} type Event Name
+	 * @param {string} event Event Name
 	 * @param {Function} handler Callback
 	 * @returns {this}
 	 */
-	off(type, handler) {
-		const handlers = this.all.get(type);
+	off(event, handler) {
+		const handlers = this.all.get(event);
 
 		if (handlers) {
 			if (handler) {
@@ -47,7 +47,7 @@ export default class Emitter {
 					handlers.splice(index, 1);
 				}
 			}
-			else this.all.set(type, []);
+			else this.all.set(event, []);
 		}
 
 		return this;
@@ -55,12 +55,12 @@ export default class Emitter {
 
 	/**
 	 * Notifies all active listeners
-	 * @param {string} type Event Name
+	 * @param {string} event Event Name
 	 * @param {...any} args Arguments
 	 * @returns {this}
 	 */
-	emit(type, ...args) {
-		let handlers = this.all.get(type);
+	emit(event, ...args) {
+		let handlers = this.all.get(event);
 
 		if (handlers) {
 			for (const handler of handlers.slice()) {
@@ -70,7 +70,7 @@ export default class Emitter {
 
 		if (handlers = this.all.get('*')) {
 			for (const handler of handlers.slice()) {
-				handler(type, ...args);
+				handler(event, ...args);
 			}
 		}
 
