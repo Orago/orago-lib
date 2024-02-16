@@ -12,13 +12,25 @@ export default class TypedEmitter {
 			this.all = all;
 		} else if (Array.isArray(all)) {
 			this.all = new Map(all);
-		} else if (typeof all === 'object'){
-			this.all = new Map(Object.entries(all));
+		} else if (typeof all === 'object') {
+			this.all = new Map();
+
+			for (const [event, handler_s] of Object.entries(all)) {
+				if (typeof handler_s === 'function') {
+					this.#on(event, handler_s);
+				} else if (Array.isArray(handler_s)) {
+					for (const handler of handler_s) {
+						if (typeof handler === 'function') {
+							this.#on(event, handler);
+						}
+					}
+				}
+			}
 		}
 	}
 
 	/** @type {import('./e.js').SubTypeFn<E>} */
-	on(event, handler) {
+	#on(event, handler) {
 		const handlers = this.all.get(event);
 
 		if (handlers) {
@@ -30,31 +42,13 @@ export default class TypedEmitter {
 		return this;
 	}
 
-	/** @type {import('./e.js').SubTypeFn<E>} */
-	off(event, handler) {
-		const handlers = this.all.get(event);
-
-		if (handlers) {
-			if (handler) {
-				const index = handlers.indexOf(handler);
-
-				if (index !== -1) {
-					handlers.splice(index, 1);
-				}
-			} else {
-				this.all.set(event, []);
-			}
-		}
-
-		return this;
-	}
-
 	/** @type {import('./e.js').PubTypeFn<E>} */
 	emit(event, ...args) {
 		let handlers = this.all.get(event);
 
 		if (handlers) {
 			for (const handler of handlers.slice()) {
+				// @ts-ignore
 				handler(...args);
 			}
 		}
@@ -72,24 +66,3 @@ export default class TypedEmitter {
 		}
 	}
 };
-
-
-const testEvents = {
-	/**
-	 * @param {string} e 
-	 */
-	cat(e) {
-
-	},
-
-	/**
-	 * @param {number} n
-	 * @param {string} [d]
-	 */
-	reload(n, d) {
-
-	}
-}
-
-/** @type {TypedEmitter<testEvents>} */
-const e = new TypedEmitter(testEvents);

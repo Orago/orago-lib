@@ -1,3 +1,4 @@
+export { default as TypedEmitter } from './typedEmitter.js';
 
 export default class Emitter {
 	/** @type {Map<string, Array<Function>>} */
