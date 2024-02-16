@@ -1,25 +1,23 @@
+
 /**
- * @template T
+ * @template E
  */
-export default class Emitter {
-	/** @type {Map<string, Array<T>>} */
+export default class TypedEmitter {
+	/** @type {Map<string, Array<import('./e.js').MessageFn<any>>>} */
 	all = new Map();
 
-	/** @param {Array<[string, T]> | Map<string, T>} [all] */
+	/** @param {Array<any> | Map<any, any> | object} [all] */
 	constructor(all) {
 		if (all instanceof Map) {
 			this.all = all;
 		} else if (Array.isArray(all)) {
 			this.all = new Map(all);
+		} else if (typeof all === 'object'){
+			this.all = new Map(Object.entries(all));
 		}
 	}
 
-	/**
-	 * Adds a listener
-	 * @param {string} event Event Name
-	 * @param {T} handler Callback
-	 * @returns {this}
-	 */
+	/** @type {import('./e.js').SubTypeFn<E>} */
 	on(event, handler) {
 		const handlers = this.all.get(event);
 
@@ -32,12 +30,7 @@ export default class Emitter {
 		return this;
 	}
 
-	/**
-	 * disables a listener
-	 * @param {string} event Event Name
-	 * @param {T} handler Callback
-	 * @returns {this}
-	 */
+	/** @type {import('./e.js').SubTypeFn<E>} */
 	off(event, handler) {
 		const handlers = this.all.get(event);
 
@@ -56,12 +49,7 @@ export default class Emitter {
 		return this;
 	}
 
-	/**
-	 * Notifies all active listeners
-	 * @param {string} event Event Name
-	 * @param {...any} args Arguments
-	 * @returns {this}
-	 */
+	/** @type {import('./e.js').PubTypeFn<E>} */
 	emit(event, ...args) {
 		let handlers = this.all.get(event);
 
@@ -71,18 +59,12 @@ export default class Emitter {
 			}
 		}
 
-		if (handlers = this.all.get('*')) {
-			for (const handler of handlers.slice()) {
-				handler(event, ...args);
-			}
-		}
-
 		return this;
 	}
 
 	/**
 	 * Export
-	 * @yields {[string, Array<T>]}
+	 * @yields {string}
 	 */
 	*[Symbol.iterator]() {
 		for (const entry of this.all.entries()) {
@@ -90,3 +72,24 @@ export default class Emitter {
 		}
 	}
 };
+
+
+const testEvents = {
+	/**
+	 * @param {string} e 
+	 */
+	cat(e) {
+
+	},
+
+	/**
+	 * @param {number} n
+	 * @param {string} [d]
+	 */
+	reload(n, d) {
+
+	}
+}
+
+/** @type {TypedEmitter<testEvents>} */
+const e = new TypedEmitter(testEvents);
