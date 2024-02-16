@@ -2,18 +2,21 @@
 /**
  * @template E
  */
-export default class TypedEmitter {
+export default class Emitter {
 	/** @type {Map<string, Array<import('./e.d.ts').MessageFn<any>>>} */
 	all = new Map();
 
-	/** @param {Array<any> | Map<any, any> | object} [all] */
+	/**
+	 * @type {Set<import('./e.d.ts').MessageFn<any>>}
+	 */
+	any = new Set();
+
+	/** @param {Array<any> | Map<any, any>} [all] */
 	constructor(all) {
 		if (all instanceof Map) {
 			this.all = all;
 		} else if (Array.isArray(all)) {
 			this.all = new Map(all);
-		} else if (typeof all === 'object'){
-			this.all = new Map(Object.entries(all));
 		}
 	}
 
@@ -73,23 +76,26 @@ export default class TypedEmitter {
 	}
 };
 
+/**
+ * @typedef {object} eh
+ * @property {string} cat
+ * @property {object} reload
+ * @property {boolean} reload.all
+ */
 
 const testEvents = {
-	/**
-	 * @param {string} e 
-	 */
-	cat(e) {
+	cat: {
 
 	},
-
-	/**
-	 * @param {number} n
-	 * @param {string} [d]
-	 */
-	reload(n, d) {
-
-	}
+	reload: 'g'
 }
 
-/** @type {TypedEmitter<testEvents>} */
-const e = new TypedEmitter(testEvents);
+/** @type {Emitter<eh>} */
+const e = new Emitter(Object.entries(testEvents));
+
+e.emit(
+	'reload',
+	{
+		
+	}
+);
