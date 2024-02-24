@@ -1,6 +1,6 @@
 {
 	"name": "@orago/lib",
-	"version": "0.0.4",
+	"version": "0.0.6",
 	"description": "Orago's library",
 	"type": "module",
 	"scripts": {
@@ -8,15 +8,12 @@
 	},
 	"author": "Orago",
 	"license": "ISC",
-	"devDependencies": {
-		"eslint": "^8.56.0",
-		"eslint-plugin-jsdoc": "^48.0.4"
-	},
 	"exports": {
 		"./emitter": "./src/emitter.js",
 		"./status": "./src/status.js",
 		"./math": "./src/math.js",
-		"./colors": "./src/colors.js"
+		"./colors": "./src/colors.js",
+		"./string": "./src/string.js"
 	},
 	"typesVersions": {
 		"*": {
