@@ -1,35 +1,22 @@
 
-/**
- * a0 checks if string is anything a-z and 0-9
- * @param {string} text String to check
- * @returns {boolean}
- */
-export const a0 = text =>
+/** a0 checks if string is anything a-z and 0-9 */
+export const a0 = (text: string): boolean =>
   text == undefined || /[^a-z0-9]/i.test(text);
 
 /**
  * Checks if string includes <html> </tags>
- * @param {string} text String to check
- * @returns {boolean}
  * @deprecated
  */
-export const htmlCheck = text =>
+export const htmlCheck = (text: string): boolean =>
   /<\s*[^>]*>/g.test(text);
 
 /**
  * Makes the first letter uppercase
- * @param {string} text String to change casing
- * @returns {string}
  */
-export const caps = text =>
+export const caps = (text: string): string =>
   text.charAt(0).toUpperCase() + text.slice(1);
 
-
-/**
- * @param {string} str 
- * @returns {string}
- */
-export function toTitleCase(str) {
+export function toTitleCase(str: string): string {
   return str.replace(
     /\w\S*/g,
     function(txt) {
@@ -38,12 +25,7 @@ export function toTitleCase(str) {
   );
 }
 
-/**
- * 
- * @param {number} length 
- * @returns {string}
- */
-export function genString(length) {
+export function genString(length: number): string {
   let result = '';
   let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let charLength = characters.length;

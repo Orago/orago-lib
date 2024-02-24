@@ -5,10 +5,13 @@ class $A {
 	static None = 0;
 }
 
-/**
- * @type {{[color: string]: rgbArray}}
- */
-export const wordsToRgb = {
+export type rgbArray = [
+	red: number,
+	green: number,
+	blue: number
+];
+
+export const wordsToRgb: { [color: string]: rgbArray; } = {
 	red: [$A.Full, $A.None, $A.None],
 	orange: [$A.Full, $A.Half, $A.None],
 	yellow: [$A.Full, $A.Full, $A.None],
@@ -30,53 +33,36 @@ export const wordsToRgb = {
 };
 
 /**
- * @typedef {[
- *  red: number,
- *  green: number,
- *  blue: number
- * ]} rgbArray
- */
-
-/** @type {rgbArray} */
-export let rgbArray;
-
-/**
  * Checks if an input is a valid wordColor
- * @param {string} input 
- * @returns {boolean}
  */
-export function isWordColor(input) {
+export function isWordColor(input: string): boolean {
 	return wordsToRgb.hasOwnProperty(input);
 }
 
 /** 
  * Checks if all items in an array match
  * Faster yet slightly different version of badlyColorImage
- * -
- * @param {string} input
- * @returns {[
- *  red: number,
- *  green: number,
- *  blue: number
- * ]}
  */
-export function convertWordColorToRGB(input) {
+export function convertWordColorToRGB(input: string): [
+	red: number,
+	green: number,
+	blue: number
+] {
 	/* Convert the word color to lowercase for case-insensitive matching */
 	const wordColor = (input + '').toLowerCase();
 
 	/* Check if the word color exists in the color map */
 	if (wordsToRgb.hasOwnProperty(wordColor)) {
 		return wordsToRgb[wordColor];
+	} else {
+		return [0, 0, 0];
 	}
-	else return [0, 0, 0];
 }
 
 /** 
  * Tests with regex whether a string fits a hex code with hashtag
- * @param {string} hexcode
- * @returns {boolean}
  */
-export function isHexadecimal(hexcode) {
+export function isHexadecimal(hexcode: string): boolean {
 	// Regular expression to match hexadecimal color patterns: # followed by 3 or 6 hexadecimal digits
 	// Check if the input matches the hexadecimal pattern
 	return /^#([0-9a-fA-F]{3}){1,2}$/.test(hexcode);
@@ -84,14 +70,12 @@ export function isHexadecimal(hexcode) {
 
 /** 
  * Returns an rgb array based off a hex code string with hashtag
- * @param {string} hexColor
- * @returns {[
- *  red: number,
- *  green: number,
- *  blue: number
- * ]}
  */
-export function convertHexToRGB(hexColor) {
+export function convertHexToRGB(hexColor: string): [
+	red: number,
+	green: number,
+	blue: number
+] {
 	// Remove the "#" symbol if present
 	const hex = hexColor.replace('#', '');
 
@@ -120,10 +104,8 @@ const rgbStringRegex =
 
 /** 
  * Checks if a string is a css RGB code ('rgb(255, 255, 255)')
- * @param {string} rgbString
- * @returns {boolean}
  */
-export function isRGB(rgbString) {
+export function isRGB(rgbString: string): boolean {
 	// Regular expression to match RGB color patterns: rgb(x, y, z) where x, y, and z are integers between 0 and 255
 	// Check if the input matches the RGB pattern
 	return rgbStringRegex.test(rgbString);
@@ -131,11 +113,8 @@ export function isRGB(rgbString) {
 
 /** 
  * Checks if a string is a css RGB code ('rgb(255, 255, 255)')
- * -
- * @param {string} input
- * @returns {rgbArray}
  */
-export function getRGBValues(input) {
+export function getRGBValues(input: string): rgbArray {
 	/**
 	 * Check if the input matches the RGB pattern
 	 * Extract the RGB values from the input, then return the RGB values as an array
@@ -150,7 +129,7 @@ export function getRGBValues(input) {
 				g,
 				b
 			] = matched.map(Number);
-			
+
 			return [r, g, b];
 		}
 
@@ -163,10 +142,8 @@ export function getRGBValues(input) {
 
 /**
  * Attempts to return an array of rgb color values
- * @param  {string | rgbArray} input 
- * @returns {rgbArray?}
  */
-export function tryRgb(input) {
+export function tryRgb(input: string | rgbArray): rgbArray | null {
 
 	/* If array of 3 */
 	if (Array.isArray(input) && input.length === 3) {
@@ -207,26 +184,14 @@ export function tryRgb(input) {
 
 /**
  * Always returns an array of rgb color values
- * @param  {string | [red: number, green: number, blue: number]} input 
- * @returns {rgbArray}
  */
-export function forceRgb(input) {
+export function forceRgb(input: string | [red: number, green: number, blue: number]): rgbArray {
 	return tryRgb(input) ?? [0, 0, 0];
 }
 
-/**
- * @type {{[property: string]: rgbArray | null}}
- */
-const cache = {
+const cache: { [property: string]: rgbArray | null; } = {};
 
-};
-
-/**
- * 
- * @param {...any} inputs 
- * @returns {ReturnType<tryRgb>}
- */
-export function tryRGB_Cached(inputs) {
+export function tryRGB_Cached(inputs: string | rgbArray): ReturnType<typeof tryRgb> {
 	const stringified = JSON.stringify(inputs);
 
 	return cache[stringified] ??= tryRgb(inputs);
@@ -234,12 +199,12 @@ export function tryRGB_Cached(inputs) {
 
 /**
  * Converts RGB values to a Hue
- * @param {number} red Brightness
- * @param {number} green Brightness
- * @param {number} blue Brightness
- * @returns {number} Hue
  */
-export function rgbToHue(red, green, blue) {
+export function rgbToHue(
+	red: number,
+	green: number,
+	blue: number
+): number {
 	red /= 255;
 	green /= 255;
 	blue /= 255;
@@ -248,10 +213,7 @@ export function rgbToHue(red, green, blue) {
 	let min = Math.min(red, green, blue);
 	let c = max - min;
 
-	/**
-	 * @type {number}
-	 */
-	let hue = 0;
+	let hue: number = 0;
 	let segment, shift;
 
 	if (c == 0) {
@@ -283,15 +245,11 @@ export function rgbToHue(red, green, blue) {
 	return hue * 60; // hue is in [0,6], scale it up
 }
 
-/**
- * @param {string} str 
- * @returns {[
- *  red: number,
- *  green: number,
- *  blue: number
- * ]}
- */
-export function stringToRGBArray(str) {
+export function stringToRGBArray(str: string): [
+	red: number,
+	green: number,
+	blue: number
+] {
 	// Simple hash function to generate a numeric hash code
 	let hash = 0;
 

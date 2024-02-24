@@ -1,11 +1,7 @@
-export { default as TypedEmitter } from './typedEmitter.js';
-
 export default class Emitter {
-	/** @type {Map<string, Array<Function>>} */
-	all = new Map();
+	all: Map<string, Array<Function>> = new Map();
 
-	/** @param {Array<any> | Map<any, any>} [all] */
-	constructor(all) {
+	constructor(all: Array<any> | Map<any, any>) {
 		if (all instanceof Map) {
 			this.all = all;
 		} else if (Array.isArray(all)) {
@@ -15,11 +11,8 @@ export default class Emitter {
 
 	/**
 	 * Adds a listener
-	 * @param {string} event Event Name
-	 * @param {Function} handler Callback
-	 * @returns {this}
 	 */
-	on(event, handler) {
+	on(event: string, handler: Function): this {
 		const handlers = this.all.get(event);
 
 		if (handlers) {
@@ -33,11 +26,8 @@ export default class Emitter {
 
 	/**
 	 * disables a listener
-	 * @param {string} event Event Name
-	 * @param {Function} handler Callback
-	 * @returns {this}
 	 */
-	off(event, handler) {
+	off(event: string, handler: Function): this {
 		const handlers = this.all.get(event);
 
 		if (handlers) {
@@ -47,8 +37,9 @@ export default class Emitter {
 				if (index !== -1) {
 					handlers.splice(index, 1);
 				}
+			} else {
+				this.all.set(event, []);
 			}
-			else this.all.set(event, []);
 		}
 
 		return this;
@@ -56,11 +47,8 @@ export default class Emitter {
 
 	/**
 	 * Notifies all active listeners
-	 * @param {string} event Event Name
-	 * @param {...any} args Arguments
-	 * @returns {this}
 	 */
-	emit(event, ...args) {
+	emit(event: string, ...args: any[]): this {
 		let handlers = this.all.get(event);
 
 		if (handlers) {
@@ -78,10 +66,7 @@ export default class Emitter {
 		return this;
 	}
 
-	/**
-	 * Export
-	 * @yields {string}
-	 */
+
 	*[Symbol.iterator]() {
 		for (const entry of this.all.entries()) {
 			yield entry;
