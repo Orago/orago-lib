@@ -1,20 +1,38 @@
 {
 	"name": "@orago/lib",
-	"version": "0.0.8",
+	"version": "0.0.12",
 	"description": "Orago's library",
-	"type": "module",
 	"scripts": {
 		"install": "tsc",
+		"build": "npm run build-cjs & npm run build-esm",
+		"build-cjs": "npx tsc --module commonjs --outDir cjs/",
+		"build-esm": "npx tsc --module es2022 --outDir esm/",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "Orago",
 	"license": "ISC",
+	"type": "module",
 	"exports": {
-		"./emitter": "./src/emitter.js",
-		"./status": "./src/status.js",
-		"./math": "./src/math.js",
-		"./colors": "./src/colors.js",
-		"./string": "./src/string.js"
+		"./emitter": {
+			"import": "./esm/emitter.js",
+			"require": "./cjs/emitter.js"
+		},
+		"./status": {
+			"import": "./esm/status.js",
+			"require": "./cjs/status.js"
+		},
+		"./math": {
+			"import": "./esm/math.js",
+			"require": "./cjs/math.js"
+		},
+		"./colors": {
+			"import": "./esm/colors.js",
+			"require": "./cjs/colors.js"
+		},
+		"./string": {
+			"import": "./esm/string.js",
+			"require": "./cjs/string.js"
+		}
 	},
 	"typesVersions": {
 		"*": {
@@ -22,5 +40,8 @@
 				"./src/*"
 			]
 		}
+	},
+	"dependencies": {
+		"typescript": "^5.3.3"
 	}
 }

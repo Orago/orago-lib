@@ -1,6 +1,6 @@
 export class StatusResponse {
-	status = false;
-	response = '';
+	status: boolean = false;
+	response: string = '';
 
 	constructor(response: string) {
 		if (typeof response === 'string') {
@@ -9,28 +9,27 @@ export class StatusResponse {
 	}
 }
 
-export class Success extends StatusResponse {
+export class Success<Data = void> extends StatusResponse {
 	status: true = true;
-	data: object = {};
+	data?: Data;
 
-	constructor(response: string = 'Success!', data: object) {
+	constructor(response: string = 'Success!', data?: Data) {
 		super(response);
 
-		if (typeof data === 'object') {
+		if (data != undefined) {
 			this.data = data;
 		}
 	}
 }
 
-export class Error extends StatusResponse {
-	prototype = StatusResponse;
+export class Error<Data = void> extends StatusResponse {
 	status: false = false;
-	data: object = {};
+	data?: Data;
 
-	constructor(response: string = 'Error!', data: object) {
+	constructor(response: string = 'Error!', data?: Data) {
 		super(response);
 
-		if (typeof data === 'object') {
+		if (data != undefined) {
 			this.data = data;
 		}
 	}
@@ -61,6 +60,6 @@ export class CustomStatus<Type> {
 export default class Status extends StatusResponse {
 	static Success = Success;
 	static Error = Error;
-	
+
 	data: object = {};
 }

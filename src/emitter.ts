@@ -1,7 +1,7 @@
 export default class Emitter {
 	all: Map<string, Array<Function>> = new Map();
 
-	constructor(all: Array<any> | Map<any, any>) {
+	constructor(all?: Array<any> | Map<any, any>) {
 		if (all instanceof Map) {
 			this.all = all;
 		} else if (Array.isArray(all)) {
@@ -9,9 +9,7 @@ export default class Emitter {
 		}
 	}
 
-	/**
-	 * Adds a listener
-	 */
+	/** Adds a listener */
 	on(event: string, handler: Function): this {
 		const handlers = this.all.get(event);
 
@@ -24,9 +22,7 @@ export default class Emitter {
 		return this;
 	}
 
-	/**
-	 * disables a listener
-	 */
+	/** Disables a listener */
 	off(event: string, handler: Function): this {
 		const handlers = this.all.get(event);
 
@@ -45,9 +41,7 @@ export default class Emitter {
 		return this;
 	}
 
-	/**
-	 * Notifies all active listeners
-	 */
+	/** Notifies all active listeners */
 	emit(event: string, ...args: any[]): this {
 		let handlers = this.all.get(event);
 

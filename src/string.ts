@@ -10,9 +10,7 @@ export const a0 = (text: string): boolean =>
 export const htmlCheck = (text: string): boolean =>
   /<\s*[^>]*>/g.test(text);
 
-/**
- * Makes the first letter uppercase
- */
+/** Makes the first letter uppercase */
 export const caps = (text: string): string =>
   text.charAt(0).toUpperCase() + text.slice(1);
 

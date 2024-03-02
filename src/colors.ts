@@ -102,18 +102,14 @@ export function convertHexToRGB(hexColor: string): [
 const rgbStringRegex =
 	/^rgb\(\s*((1?[0-9]{1,2}|2([0-4][0-9]|5[0-5])),\s*){2}(1?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))\s*\)$/;
 
-/** 
- * Checks if a string is a css RGB code ('rgb(255, 255, 255)')
- */
+/** Checks if a string is a css RGB code ('rgb(255, 255, 255)') */
 export function isRGB(rgbString: string): boolean {
 	// Regular expression to match RGB color patterns: rgb(x, y, z) where x, y, and z are integers between 0 and 255
 	// Check if the input matches the RGB pattern
 	return rgbStringRegex.test(rgbString);
 }
 
-/** 
- * Checks if a string is a css RGB code ('rgb(255, 255, 255)')
- */
+/** Checks if a string is a css RGB code ('rgb(255, 255, 255)') */
 export function getRGBValues(input: string): rgbArray {
 	/**
 	 * Check if the input matches the RGB pattern
@@ -140,12 +136,8 @@ export function getRGBValues(input: string): rgbArray {
 	else return [0, 0, 0];
 }
 
-/**
- * Attempts to return an array of rgb color values
- */
+/** Attempts to return an array of rgb color values */
 export function tryRgb(input: string | rgbArray): rgbArray | null {
-
-	/* If array of 3 */
 	if (Array.isArray(input) && input.length === 3) {
 		const [
 			r = 0,
@@ -154,37 +146,23 @@ export function tryRgb(input: string | rgbArray): rgbArray | null {
 		] = input;
 
 		return [r, g, b];
-	}
-
-	/* Input is string type */
-	else if (typeof input === 'string') {
-
-		/* If Hexadecimal */
+	} else if (typeof input === 'string') {
 		if (isHexadecimal(input)) {
 			return convertHexToRGB(input);
-		}
-
-		/* If Word Color */
-		else if (isWordColor(input)) {
+		} else if (isWordColor(input)) {
 			return convertWordColorToRGB(input);
-		}
-
-		/* If RGB String */
-		else if (
+		} else if (
 			typeof input === 'string' &&
 			isRGB(input)
 		) {
 			return getRGBValues(input);
 		}
-
 	}
 
 	return null;
 }
 
-/**
- * Always returns an array of rgb color values
- */
+/** Always returns an array of rgb color values */
 export function forceRgb(input: string | [red: number, green: number, blue: number]): rgbArray {
 	return tryRgb(input) ?? [0, 0, 0];
 }
@@ -197,9 +175,7 @@ export function tryRGB_Cached(inputs: string | rgbArray): ReturnType<typeof tryR
 	return cache[stringified] ??= tryRgb(inputs);
 }
 
-/**
- * Converts RGB values to a Hue
- */
+/** Converts RGB values to a Hue */
 export function rgbToHue(
 	red: number,
 	green: number,
