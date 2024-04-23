@@ -1,3 +1,8 @@
+export { default as Color } from './colorUtils/color.js';
+export { default as DecimalUtil } from './colorUtils/decimal.js';
+export { default as HexUtil } from './colorUtils/hex.js';
+export { default as RgbUtil } from './colorUtils/rgb.js';
+
 // Define a mapping of word colors to their corresponding RGB values
 class $A {
 	static Full = 255;

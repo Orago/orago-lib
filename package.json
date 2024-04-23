@@ -5,8 +5,8 @@
 	"scripts": {
 		"install": "tsc",
 		"build": "npm run build-cjs & npm run build-esm",
-		"build-cjs": "npx tsc --module commonjs --outDir cjs/",
-		"build-esm": "npx tsc --module es2022 --outDir esm/",
+		"build-cjs": "npx tsc --module commonjs --moduleResolution node --outDir cjs/",
+		"build-esm": "npx tsc --module NodeNext --outDir esm/",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "Orago",
