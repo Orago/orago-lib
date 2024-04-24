@@ -41,6 +41,10 @@ export default class Color {
 	static RGB = RgbColor;
 	static HEX = HexColor;
 
+	static shake (from: ColorFormat, to: ColorFormat){
+		const [a, b] = [from, to].map(e => formatMap[e]);
+		
+	}
 
 	static fromRGB(rgb: RgbArray) {
 		return new Color(RgbColor.toDecimal(rgb));
