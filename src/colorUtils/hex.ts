@@ -1,14 +1,14 @@
-import { rgbArray } from '../colors.js';
+import { RgbArray } from './rgb.js';
 import RgbColor from './rgb.js';
 
 export type HexadecimalValue = string;
 
 export default class HexColor {
-	static toDecimal (hex: HexadecimalValue): number {
+	static toDecimal(hex: HexadecimalValue): number {
 		return RgbColor.toDecimal(this.toRGB(hex));
 	}
 
-	static toRGB (hex: HexadecimalValue): rgbArray {
+	static toRGB(hex: HexadecimalValue): RgbArray {
 		// Remove '#' if present
 		hex = hex.replace(/^#/, '');
 

@@ -2,11 +2,34 @@
 // https://github.com/Qix-/color
 // I was too tired to relearn half of this
 
-import { rgbArray } from '../colors.js';
 import DecimalColor from './decimal.js';
 import HexColor, { HexadecimalValue } from './hex.js';
-import RgbColor from './rgb.js';
+import HslColor from './hsl.js';
+import RgbColor, { RgbArray } from './rgb.js';
 
+enum colorTypes {
+	RGB,
+	HSL,
+	HEX,
+	Decimal,
+}
+
+const neighborsTo = {
+	[colorTypes.RGB]: [colorTypes.HSL, colorTypes.HEX, colorTypes.Decimal],
+	[colorTypes.HSL]: [colorTypes.RGB],
+	[colorTypes.HEX]: [colorTypes.RGB],
+	[colorTypes.Decimal]: [colorTypes.RGB],
+}
+
+
+type ColorFormat = 'rgb' | 'hsl' | 'hex' | 'decimal';
+
+const formatMap = {
+	rgb: colorTypes.RGB,
+	hsl: colorTypes.HSL,
+	hex: colorTypes.HEX,
+	decimal: colorTypes.Decimal
+}
 
 export default class Color {
 	value: number;
@@ -18,12 +41,18 @@ export default class Color {
 	static RGB = RgbColor;
 	static HEX = HexColor;
 
-	static fromRGB (rgb: rgbArray){
+
+	static fromRGB(rgb: RgbArray) {
 		return new Color(RgbColor.toDecimal(rgb));
 	}
 
-	static fromHex (hex: HexadecimalValue){
+	static fromHex(hex: HexadecimalValue) {
 		return new Color(HexColor.toDecimal(hex));
+	}
+
+	_set(decimal: number) {
+		this.value = decimal;
+		return this;
 	}
 
 	red() { return DecimalColor.toRGB(this.value)[0]; }
@@ -35,22 +64,47 @@ export default class Color {
 	hex() { return RgbColor.toHex(this.rgb()); }
 
 	invert() {
-		this.value = DecimalColor.fromRGB(
-			RgbColor.inverted(
-				this.rgb()
+		return this._set(
+			DecimalColor.fromRGB(
+				RgbColor.inverted(
+					this.rgb()
+				)
 			)
 		);
-
-		return this;
 	}
 
-	grayscale (){
-		this.value = DecimalColor.fromRGB(
-			RgbColor.grayscale(
-				this.rgb()
+	grayscale() {
+		return this._set(
+			DecimalColor.fromRGB(
+				RgbColor.grayscale(
+					this.rgb()
+				)
 			)
 		);
-
-		return this;
 	}
+
+	lighten(ratio: number) {
+		const hsl = this.hsl();
+		hsl[2] += hsl[2] * ratio;
+		return this._set(
+			DecimalColor.fromRGB(HslColor.toRGB(hsl))
+		);
+	}
+
+	darken(ratio: number) {
+		const hsl = this.hsl();
+		hsl[2] -= hsl[2] * ratio;
+		return this._set(
+			DecimalColor.fromRGB(HslColor.toRGB(hsl))
+		);
+	}
+
+	saturate(ratio: number) {
+		const hsl = this.hsl();
+		hsl[1] += hsl[1] * ratio;
+
+		return this._set(
+			DecimalColor.fromRGB(HslColor.toRGB(hsl))
+		);
+	};
 }

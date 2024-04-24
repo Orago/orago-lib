@@ -1,8 +1,14 @@
-import { rgbArray } from '../colors.js';
 import { HexadecimalValue } from './hex.js';
+import { HslArray } from './hsl.js';
+
+export type RgbArray = [
+	red: number,
+	green: number,
+	blue: number
+];
 
 export default class RgbColor {
-	static isDark(rgb: rgbArray): boolean {
+	static isDark(rgb: RgbArray): boolean {
 		return 128 > (
 			(
 				rgb[0] * 2126 +
@@ -12,21 +18,21 @@ export default class RgbColor {
 		);
 	}
 
-	static isLight(rgb: rgbArray): boolean {
+	static isLight(rgb: RgbArray): boolean {
 		return this.isDark(rgb) != true;
 	}
 
-	static inverted(rgb: rgbArray): rgbArray {
-		return <rgbArray>rgb.map(n => 255 - n);
+	static inverted(rgb: RgbArray): RgbArray {
+		return <RgbArray>rgb.map(n => 255 - n);
 	}
 
-	static grayscale(rgb: rgbArray): rgbArray {
+	static grayscale(rgb: RgbArray): RgbArray {
 		const value = rgb[0] * 0.3 + rgb[1] * 0.59 + rgb[2] * 0.11;
 
 		return [value, value, value];
 	}
 
-	static luminosity(rgb: rgbArray) {
+	static luminosity(rgb: RgbArray) {
 		// http://www.w3.org/TR/WCAG20/#relativeluminancedef
 		const lum = [];
 
@@ -39,7 +45,7 @@ export default class RgbColor {
 		return 0.2126 * lum[0] + 0.7152 * lum[1] + 0.0722 * lum[2];
 	}
 
-	static contrast(rgbOne: rgbArray, rgbTwo: rgbArray): number {
+	static contrast(rgbOne: RgbArray, rgbTwo: RgbArray): number {
 		const lum1 = this.luminosity(rgbOne);
 		const lum2 = this.luminosity(rgbTwo);
 
@@ -50,11 +56,11 @@ export default class RgbColor {
 		return (lum2 + 0.05) / (lum1 + 0.05);
 	}
 
-	static toDecimal(rgb: rgbArray): number {
+	static toDecimal(rgb: RgbArray): number {
 		return rgb[0] << 16 | rgb[1] << 8 | rgb[2];
 	}
 
-	static toHex(rgb: rgbArray): HexadecimalValue {
+	static toHex(rgb: RgbArray): HexadecimalValue {
 		let [red, green, blue] = rgb;
 
 		red = Math.max(0, Math.min(255, red));
@@ -69,7 +75,7 @@ export default class RgbColor {
 		return hexColor.toUpperCase();
 	}
 
-	static toHue(rgb: rgbArray) {
+	static toHue(rgb: RgbArray) {
 		let [red, green, blue] = rgb;
 
 		red /= 255;
@@ -112,7 +118,7 @@ export default class RgbColor {
 		return hue * 60; // hue is in [0,6], scale it up
 	}
 
-	static toHSL(rgb: rgbArray){
+	static toHSL(rgb: RgbArray): HslArray {
 		let [r, g, b] = rgb;
 
 		// Normalize RGB values

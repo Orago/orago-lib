@@ -1,3 +1,5 @@
+import { RgbArray } from './colorUtils/rgb.js';
+
 export { default as Color } from './colorUtils/color.js';
 export { default as DecimalUtil } from './colorUtils/decimal.js';
 export { default as HexUtil } from './colorUtils/hex.js';
@@ -10,13 +12,7 @@ class $A {
 	static None = 0;
 }
 
-export type rgbArray = [
-	red: number,
-	green: number,
-	blue: number
-];
-
-export const wordsToRgb: { [color: string]: rgbArray; } = {
+export const wordsToRgb: { [color: string]: RgbArray; } = {
 	red: [$A.Full, $A.None, $A.None],
 	orange: [$A.Full, $A.Half, $A.None],
 	yellow: [$A.Full, $A.Full, $A.None],
@@ -115,7 +111,7 @@ export function isRGB(rgbString: string): boolean {
 }
 
 /** Checks if a string is a css RGB code ('rgb(255, 255, 255)') */
-export function getRGBValues(input: string): rgbArray {
+export function getRGBValues(input: string): RgbArray {
 	/**
 	 * Check if the input matches the RGB pattern
 	 * Extract the RGB values from the input, then return the RGB values as an array
@@ -142,7 +138,7 @@ export function getRGBValues(input: string): rgbArray {
 }
 
 /** Attempts to return an array of rgb color values */
-export function tryRgb(input: string | rgbArray): rgbArray | null {
+export function tryRgb(input: string | RgbArray): RgbArray | null {
 	if (Array.isArray(input) && input.length === 3) {
 		const [
 			r = 0,
@@ -168,13 +164,13 @@ export function tryRgb(input: string | rgbArray): rgbArray | null {
 }
 
 /** Always returns an array of rgb color values */
-export function forceRgb(input: string | [red: number, green: number, blue: number]): rgbArray {
+export function forceRgb(input: string | [red: number, green: number, blue: number]): RgbArray {
 	return tryRgb(input) ?? [0, 0, 0];
 }
 
-const cache: { [property: string]: rgbArray | null; } = {};
+const cache: { [property: string]: RgbArray | null; } = {};
 
-export function tryRGB_Cached(inputs: string | rgbArray): ReturnType<typeof tryRgb> {
+export function tryRGB_Cached(inputs: string | RgbArray): ReturnType<typeof tryRgb> {
 	const stringified = JSON.stringify(inputs);
 
 	return cache[stringified] ??= tryRgb(inputs);
