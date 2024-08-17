@@ -5,9 +5,7 @@ class StatusResponse {
     constructor(response) {
         this.status = false;
         this.response = '';
-        if (typeof response === 'string') {
-            this.response = response;
-        }
+        this.response = response;
     }
 }
 exports.StatusResponse = StatusResponse;
@@ -15,9 +13,7 @@ class Success extends StatusResponse {
     constructor(response = 'Success!', data) {
         super(response);
         this.status = true;
-        if (data != undefined) {
-            this.data = data;
-        }
+        this.data = data;
     }
 }
 exports.Success = Success;
@@ -25,9 +21,7 @@ class Error extends StatusResponse {
     constructor(response = 'Error!', data) {
         super(response);
         this.status = false;
-        if (data != undefined) {
-            this.data = data;
-        }
+        this.data = data;
     }
 }
 exports.Error = Error;

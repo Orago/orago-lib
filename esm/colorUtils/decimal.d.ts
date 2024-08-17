@@ -1,5 +1,5 @@
-import { rgbArray } from '../colors.js';
+import { RgbArray } from './rgb.js';
 export default class DecimalColor {
-    static fromRGB(rgb: rgbArray): number;
-    static toRGB(decimal: number): rgbArray;
+    static fromRGB(rgb: RgbArray): number;
+    static toRGB(decimal: number): RgbArray;
 }

@@ -1,5 +1,6 @@
 import DecimalColor from './decimal.js';
 import HexColor from './hex.js';
+import HslColor from './hsl.js';
 import RgbColor from './rgb.js';
 class Color {
     constructor(value) {
@@ -11,6 +12,10 @@ class Color {
     static fromHex(hex) {
         return new Color(HexColor.toDecimal(hex));
     }
+    _set(decimal) {
+        this.value = decimal;
+        return this;
+    }
     red() { return DecimalColor.toRGB(this.value)[0]; }
     green() { return DecimalColor.toRGB(this.value)[1]; }
     blue() { return DecimalColor.toRGB(this.value)[2]; }
@@ -18,14 +23,33 @@ class Color {
     hsl() { return RgbColor.toHSL(this.rgb()); }
     hex() { return RgbColor.toHex(this.rgb()); }
     invert() {
-        this.value = DecimalColor.fromRGB(RgbColor.inverted(this.rgb()));
-        return this;
+        return this._set(DecimalColor.fromRGB(RgbColor.inverted(this.rgb())));
     }
     grayscale() {
-        this.value = DecimalColor.fromRGB(RgbColor.grayscale(this.rgb()));
-        return this;
+        return this._set(DecimalColor.fromRGB(RgbColor.grayscale(this.rgb())));
+    }
+    lighten(ratio) {
+        const hsl = this.hsl();
+        hsl[2] += hsl[2] * ratio;
+        return this._set(DecimalColor.fromRGB(HslColor.toRGB(hsl)));
+    }
+    darken(ratio) {
+        const hsl = this.hsl();
+        hsl[2] -= hsl[2] * ratio;
+        return this._set(DecimalColor.fromRGB(HslColor.toRGB(hsl)));
+    }
+    saturate(ratio) {
+        const hsl = this.hsl();
+        hsl[1] += hsl[1] * ratio;
+        return this._set(DecimalColor.fromRGB(HslColor.toRGB(hsl)));
+    }
+    ;
+    mix(color1, color2, weight) {
+        return this._set(DecimalColor.fromRGB(HslColor.toRGB(RgbColor.mix(color1, color2, weight))));
     }
 }
 Color.RGB = RgbColor;
 Color.HEX = HexColor;
+Color.HSL = HslColor;
+Color.Decimal = DecimalColor;
 export default Color;

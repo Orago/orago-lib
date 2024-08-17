@@ -112,5 +112,16 @@ class RgbColor {
         }
         return [h, s, l];
     }
+    static mix(color1, color2, weight) {
+        const p = weight === undefined ? 0.5 : weight;
+        const w = 2 * p - 1;
+        const w1 = (((w === -1) ? w : w / (1 + w)) + 1) / 2;
+        const w2 = 1 - w1;
+        return [
+            w1 * color1[0] + w2 * color2[0],
+            w1 * color1[1] + w2 * color2[1],
+            w1 * color1[2] + w2 * color2[2]
+        ];
+    }
 }
 exports.default = RgbColor;

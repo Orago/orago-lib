@@ -1,14 +1,20 @@
-import { rgbArray } from '../colors.js';
 import { HexadecimalValue } from './hex.js';
+import { HslArray } from './hsl.js';
+export type RgbArray = [
+    red: number,
+    green: number,
+    blue: number
+];
 export default class RgbColor {
-    static isDark(rgb: rgbArray): boolean;
-    static isLight(rgb: rgbArray): boolean;
-    static inverted(rgb: rgbArray): rgbArray;
-    static grayscale(rgb: rgbArray): rgbArray;
-    static luminosity(rgb: rgbArray): number;
-    static contrast(rgbOne: rgbArray, rgbTwo: rgbArray): number;
-    static toDecimal(rgb: rgbArray): number;
-    static toHex(rgb: rgbArray): HexadecimalValue;
-    static toHue(rgb: rgbArray): number;
-    static toHSL(rgb: rgbArray): any[];
+    static isDark(rgb: RgbArray): boolean;
+    static isLight(rgb: RgbArray): boolean;
+    static inverted(rgb: RgbArray): RgbArray;
+    static grayscale(rgb: RgbArray): RgbArray;
+    static luminosity(rgb: RgbArray): number;
+    static contrast(rgbOne: RgbArray, rgbTwo: RgbArray): number;
+    static toDecimal(rgb: RgbArray): number;
+    static toHex(rgb: RgbArray): HexadecimalValue;
+    static toHue(rgb: RgbArray): number;
+    static toHSL(rgb: RgbArray): HslArray;
+    static mix(color1: RgbArray, color2: RgbArray, weight?: number): RgbArray;
 }

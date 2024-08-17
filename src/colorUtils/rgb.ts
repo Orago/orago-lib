@@ -27,7 +27,10 @@ export default class RgbColor {
 	}
 
 	static grayscale(rgb: RgbArray): RgbArray {
-		const value = rgb[0] * 0.3 + rgb[1] * 0.59 + rgb[2] * 0.11;
+		const value =
+			rgb[0] * 0.3 +
+			rgb[1] * 0.59 +
+			rgb[2] * 0.11;
 
 		return [value, value, value];
 	}
@@ -49,9 +52,8 @@ export default class RgbColor {
 		const lum1 = this.luminosity(rgbOne);
 		const lum2 = this.luminosity(rgbTwo);
 
-		if (lum1 > lum2) {
+		if (lum1 > lum2)
 			return (lum1 + 0.05) / (lum2 + 0.05);
-		}
 
 		return (lum2 + 0.05) / (lum1 + 0.05);
 	}
@@ -152,5 +154,18 @@ export default class RgbColor {
 		}
 
 		return [h, s, l];
+	}
+
+	static mix(color1: RgbArray, color2: RgbArray, weight?: number): RgbArray {
+		const p = weight === undefined ? 0.5 : weight;
+		const w = 2 * p - 1;
+		const w1 = (((w === -1) ? w : w / (1 + w)) + 1) / 2;
+		const w2 = 1 - w1;
+
+		return [
+			w1 * color1[0] + w2 * color2[0],
+			w1 * color1[1] + w2 * color2[1],
+			w1 * color1[2] + w2 * color2[2]
+		];
 	}
 }

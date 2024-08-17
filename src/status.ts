@@ -3,35 +3,31 @@ export class StatusResponse {
 	response: string = '';
 
 	constructor(response: string) {
-		if (typeof response === 'string') {
-			this.response = response;
-		}
+		this.response = response;
 	}
 }
 
+type NonVoid<T> = T extends void ? undefined : T;
+
 export class Success<Data = void> extends StatusResponse {
 	status: true = true;
-	data?: Data;
+	data: NonVoid<Data>;
 
-	constructor(response: string = 'Success!', data?: Data) {
+	constructor(response: string = 'Success!', data?: NonVoid<Data>) {
 		super(response);
 
-		if (data != undefined) {
-			this.data = data;
-		}
+		this.data = data as NonVoid<Data>;
 	}
 }
 
 export class Error<Data = void> extends StatusResponse {
 	status: false = false;
-	data?: Data;
+	data: NonVoid<Data>;
 
 	constructor(response: string = 'Error!', data?: Data) {
 		super(response);
 
-		if (data != undefined) {
-			this.data = data;
-		}
+		this.data = data as NonVoid<Data>;
 	}
 }
 

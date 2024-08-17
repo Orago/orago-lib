@@ -33,9 +33,7 @@ export const wordsToRgb: { [color: string]: RgbArray; } = {
 	// Add more colors as needed
 };
 
-/**
- * Checks if an input is a valid wordColor
- */
+/** Checks if an input is a valid wordColor */
 export function isWordColor(input: string): boolean {
 	return wordsToRgb.hasOwnProperty(input);
 }
@@ -147,17 +145,20 @@ export function tryRgb(input: string | RgbArray): RgbArray | null {
 		] = input;
 
 		return [r, g, b];
-	} else if (typeof input === 'string') {
-		if (isHexadecimal(input)) {
+	}
+	
+	if (typeof input === 'string') {
+		if (isHexadecimal(input))
 			return convertHexToRGB(input);
-		} else if (isWordColor(input)) {
+
+		if (isWordColor(input))
 			return convertWordColorToRGB(input);
-		} else if (
+
+		if (
 			typeof input === 'string' &&
 			isRGB(input)
-		) {
+		)
 			return getRGBValues(input);
-		}
 	}
 
 	return null;

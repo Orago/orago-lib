@@ -2,27 +2,21 @@ export class StatusResponse {
     constructor(response) {
         this.status = false;
         this.response = '';
-        if (typeof response === 'string') {
-            this.response = response;
-        }
+        this.response = response;
     }
 }
 export class Success extends StatusResponse {
     constructor(response = 'Success!', data) {
         super(response);
         this.status = true;
-        if (data != undefined) {
-            this.data = data;
-        }
+        this.data = data;
     }
 }
 export class Error extends StatusResponse {
     constructor(response = 'Error!', data) {
         super(response);
         this.status = false;
-        if (data != undefined) {
-            this.data = data;
-        }
+        this.data = data;
     }
 }
 function _response(status, response = 'Any', data) {

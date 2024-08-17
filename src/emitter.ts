@@ -2,22 +2,21 @@ export default class Emitter {
 	all: Map<string, Array<Function>> = new Map();
 
 	constructor(all?: Array<any> | Map<any, any>) {
-		if (all instanceof Map) {
+		if (all instanceof Map)
 			this.all = all;
-		} else if (Array.isArray(all)) {
+		
+		else if (Array.isArray(all))
 			this.all = new Map(all);
-		}
 	}
 
 	/** Adds a listener */
 	on(event: string, handler: Function): this {
 		const handlers = this.all.get(event);
 
-		if (handlers) {
+		if (handlers)
 			handlers.push(handler);
-		} else {
+		else
 			this.all.set(event, [handler]);
-		}
 
 		return this;
 	}
@@ -30,12 +29,11 @@ export default class Emitter {
 			if (handler) {
 				const index = handlers.indexOf(handler);
 
-				if (index !== -1) {
+				if (index !== -1)
 					handlers.splice(index, 1);
-				}
-			} else {
-				this.all.set(event, []);
 			}
+			else
+				this.all.set(event, []);
 		}
 
 		return this;
@@ -45,25 +43,19 @@ export default class Emitter {
 	emit(event: string, ...args: any[]): this {
 		let handlers = this.all.get(event);
 
-		if (handlers) {
-			for (const handler of handlers.slice()) {
+		if (handlers)
+			for (const handler of handlers.slice())
 				handler(...args);
-			}
-		}
 
-		if (handlers = this.all.get('*')) {
-			for (const handler of handlers.slice()) {
+		if (handlers = this.all.get('*'))
+			for (const handler of handlers.slice())
 				handler(event, ...args);
-			}
-		}
 
 		return this;
 	}
 
-
 	*[Symbol.iterator]() {
-		for (const entry of this.all.entries()) {
+		for (const entry of this.all.entries())
 			yield entry;
-		}
 	}
 };

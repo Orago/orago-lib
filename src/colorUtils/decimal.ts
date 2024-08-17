@@ -2,7 +2,9 @@ import { RgbArray } from './rgb.js';
 import RgbColor from './rgb.js';
 
 export default class DecimalColor {
-	static fromRGB(rgb: RgbArray) { return RgbColor.toDecimal(rgb); }
+	static fromRGB(rgb: RgbArray) {
+		return RgbColor.toDecimal(rgb);
+	}
 
 	static toRGB(decimal: number): RgbArray {
 		return [

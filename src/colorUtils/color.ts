@@ -7,30 +7,6 @@ import HexColor, { HexadecimalValue } from './hex.js';
 import HslColor from './hsl.js';
 import RgbColor, { RgbArray } from './rgb.js';
 
-enum colorTypes {
-	RGB,
-	HSL,
-	HEX,
-	Decimal,
-}
-
-const neighborsTo = {
-	[colorTypes.RGB]: [colorTypes.HSL, colorTypes.HEX, colorTypes.Decimal],
-	[colorTypes.HSL]: [colorTypes.RGB],
-	[colorTypes.HEX]: [colorTypes.RGB],
-	[colorTypes.Decimal]: [colorTypes.RGB],
-}
-
-
-type ColorFormat = 'rgb' | 'hsl' | 'hex' | 'decimal';
-
-const formatMap = {
-	rgb: colorTypes.RGB,
-	hsl: colorTypes.HSL,
-	hex: colorTypes.HEX,
-	decimal: colorTypes.Decimal
-}
-
 export default class Color {
 	value: number;
 
@@ -40,11 +16,8 @@ export default class Color {
 
 	static RGB = RgbColor;
 	static HEX = HexColor;
-
-	static shake (from: ColorFormat, to: ColorFormat){
-		const [a, b] = [from, to].map(e => formatMap[e]);
-		
-	}
+	static HSL = HslColor;
+	static Decimal = DecimalColor;
 
 	static fromRGB(rgb: RgbArray) {
 		return new Color(RgbColor.toDecimal(rgb));
@@ -111,4 +84,14 @@ export default class Color {
 			DecimalColor.fromRGB(HslColor.toRGB(hsl))
 		);
 	};
+
+	mix(color1: RgbArray, color2: RgbArray, weight?: number) {
+		return this._set(
+			DecimalColor.fromRGB(
+				HslColor.toRGB(
+					RgbColor.mix(color1, color2, weight)
+				)
+			)
+		);
+	}
 }
