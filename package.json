@@ -1,40 +1,64 @@
 {
 	"name": "@orago/lib",
-	"version": "0.0.17",
+	"version": "0.0.42",
 	"description": "Orago's library",
 	"scripts": {
-		"install": "tsc",
-		"build": "npm run build-cjs & npm run build-esm",
-		"build-cjs": "npx tsc --module commonjs --moduleResolution node --outDir cjs/",
-		"build-esm": "npx tsc --module NodeNext --outDir esm/",
+		"build": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json",
+		"build-cjs": "npx tsc --module commonjs --moduleResolution node --outDir /dist/cjs/",
+		"build-esm": "npx tsc --module esnext --outDir /dist/esm/",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
+	"type": "module",
 	"author": "Orago",
 	"license": "ISC",
 	"exports": {
+		".": {
+			"import": "./dist/esm/index.js",
+			"require": "./dist/cjs/index.js"
+		},
 		"./emitter": {
-			"import": "./esm/emitter.js",
-			"require": "./cjs/emitter.js"
+			"import": "./dist/esm/emitter.js",
+			"require": "./dist/cjs/emitter.js"
 		},
 		"./status": {
-			"import": "./esm/status.js",
-			"require": "./cjs/status.js"
+			"import": "./dist/esm/status.js",
+			"require": "./dist/cjs/status.js"
 		},
 		"./math": {
-			"import": "./esm/math.js",
-			"require": "./cjs/math.js"
+			"import": "./dist/esm/math.js",
+			"require": "./dist/cjs/math.js"
 		},
 		"./colors": {
-			"import": "./esm/colors.js",
-			"require": "./cjs/colors.js"
+			"import": "./dist/esm/colors.js",
+			"require": "./dist/cjs/colors.js"
 		},
 		"./string": {
-			"import": "./esm/string.js",
-			"require": "./cjs/string.js"
+			"import": "./dist/esm/string.js",
+			"require": "./dist/cjs/string.js"
 		},
-		"./vector": {
-			"import": "./esm/vector.js",
-			"require": "./cjs/vector.js"
+		"./queue": {
+			"import": "./dist/esm/queue.js",
+			"require": "./dist/cjs/queue.js"
+		},
+		"./cooldown": {
+			"import": "./dist/esm/cooldown.js",
+			"require": "./dist/cjs/cooldown.js"
+		},
+		"./to-type": {
+			"import": "./dist/esm/to-type/index.js",
+			"require": "./dist/cjs/to-type/index.js"
+		},
+		"./data": {
+			"import": "./dist/esm/data/index.js",
+			"require": "./dist/cjs/data/index.js"
+		},
+		"./data/ora-pack": {
+			"import": "./dist/esm/data/ora-pack.js",
+			"require": "./dist/cjs/data/ora-pack.js"
+		},
+		"./data/buffer": {
+			"import": "./dist/esm/data/buffer.js",
+			"require": "./dist/cjs/data/buffer.js"
 		}
 	},
 	"typesVersions": {
@@ -45,6 +69,7 @@
 		}
 	},
 	"devDependencies": {
-		"typescript": "^5.4.5"
+		"@types/node": "^25.5.0",
+		"typescript": "^5.3.3"
 	}
 }

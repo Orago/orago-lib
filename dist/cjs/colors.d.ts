@@ -1,0 +1,19 @@
+import { RgbArray } from "./color-utility/rgb.js";
+export { default as Color } from "./color-utility/color.js";
+export { default as DecimalUtil } from "./color-utility/decimal.js";
+export { default as HexUtil } from "./color-utility/hex.js";
+export { default as RgbUtil } from "./color-utility/rgb.js";
+export declare const wordsToRgb: {
+    [color: string]: RgbArray;
+};
+export declare function isWordColor(input: string): boolean;
+export declare function convertWordColorToRGB(input: string): [red: number, green: number, blue: number];
+export declare function isHexadecimal(hexcode: string): boolean;
+export declare function convertHexToRGB(hexColor: string): [red: number, green: number, blue: number];
+export declare function isRGB(rgbString: string): boolean;
+export declare function getRGBValues(input: string): RgbArray;
+export declare function tryRgb(input: string | RgbArray): RgbArray | null;
+export declare function forceRgb(input: string | [red: number, green: number, blue: number]): RgbArray;
+export declare function tryRGB_Cached(inputs: string | RgbArray): ReturnType<typeof tryRgb>;
+export declare function rgbToHue(red: number, green: number, blue: number): number;
+export declare function stringToRGBArray(str: string): [red: number, green: number, blue: number];

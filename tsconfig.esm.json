@@ -1,0 +1,10 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"module": "nodenext", /* Specify what module code is generated. */
+		"outDir": "./dist/esm", /* Specify an output folder for all emitted files. */
+	},
+	"include": [
+		"src"
+	]
+}

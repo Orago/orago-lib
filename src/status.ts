@@ -1,61 +1,26 @@
-export class StatusResponse {
-	status: boolean = false;
-	response: string = '';
-
-	constructor(response: string) {
-		this.response = response;
-	}
-}
-
 type NonVoid<T> = T extends void ? undefined : T;
 
-export class Success<Data = void> extends StatusResponse {
-	status: true = true;
+class Status<S extends boolean = boolean, Data = any> {
+	static Success = class Success<Data = any> extends Status<true, Data> {
+		constructor(text: string = "Success!", data?: NonVoid<Data>) {
+			super(true, text, data);
+		}
+	};
+
+	static Error = class Error<Data = any> extends Status<false, Data> {
+		constructor(text: string = "Error!", data?: NonVoid<Data>) {
+			super(false, text, data);
+		}
+	};
+
 	data: NonVoid<Data>;
-
-	constructor(response: string = 'Success!', data?: NonVoid<Data>) {
-		super(response);
-
-		this.data = data as NonVoid<Data>;
+	constructor(
+		public status: S,
+		public text: string = "Status Response",
+		data?: NonVoid<Data>
+	) {
+		this.data = data!;
 	}
 }
 
-export class Error<Data = void> extends StatusResponse {
-	status: false = false;
-	data: NonVoid<Data>;
-
-	constructor(response: string = 'Error!', data?: Data) {
-		super(response);
-
-		this.data = data as NonVoid<Data>;
-	}
-}
-
-function _response<Type>(status: boolean, response: string = 'Any', data: Type) {
-	return {
-		status,
-		response,
-		data
-	}
-}
-
-export class CustomStatus<Type> {
-	// out: ReturnType<typeof _response<Type>>
-
-	Success(response: string = 'Success', data: Type) {
-		return _response<Type>(true, response, data);
-	}
-
-	Error(response: string = 'Err', data: Type) {
-		return _response<Type>(false, response, data);
-	}
-}
-
-//#endregion //* Custom Status *//
-
-export default class Status extends StatusResponse {
-	static Success = Success;
-	static Error = Error;
-
-	data: object = {};
-}
+export { Status as default, Status };

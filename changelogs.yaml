@@ -1,0 +1,11 @@
+---
+changelogs:
+- version: 0.0.22
+  changes:
+  - Added once callback to emitter
+  - Added signals and debounce signals
+- version: 0.0.21
+  changes:
+  - Updated toTitleCase
+  - Updated Emitter to optionally allow defined events
+  - Updated Emitter to be strict optionally
