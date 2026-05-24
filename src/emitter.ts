@@ -154,11 +154,13 @@ class Signal<T extends (...args: any[]) => any = () => void> {
 
 class DebouncedSignal<T extends (...args: any[]) => any> extends Signal<T> {
 	private timer: ReturnType<typeof setTimeout> | null = null;
-	public readonly delay: number;
 
-	constructor(delay_ms: number) {
+	/**
+	 *
+	 * @param delay - milliseconds
+	 */
+	constructor(public delay: number) {
 		super();
-		this.delay = delay_ms;
 	}
 
 	forceEmit(...args: Parameters<T>): this {
@@ -194,8 +196,8 @@ class State<T> {
 		return this._value !== value;
 	}
 
-	protected transform(value: T): T {
-		return value;
+	protected transform<IN = any>(value: IN): T {
+		return value as unknown as T;
 	}
 
 	public get(): T {

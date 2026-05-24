@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DimensionalMap = exports.VectorUtil = exports.VectorMap = exports.Vector3i = exports.Vector3 = exports.Vector2i = exports.Vector2 = void 0;
+exports.Vec3D = exports.Vec2D = exports.Vec1D = exports.VecMap = exports.VectorUtil = exports.VectorMap = exports.Vector3i = exports.Vector3 = exports.Vector2i = exports.Vector2 = void 0;
 var Helpers;
 (function (Helpers) {
     class VecLike {
@@ -145,7 +145,6 @@ class VectorMap {
 }
 exports.VectorMap = VectorMap;
 class VectorUtil {
-    length;
     static parseVector(input) {
         const regex = /^\(\s*-?\d+(\s*,\s*-?\d+)*\s*\)$/;
         if (!regex.test(input)) {
@@ -156,76 +155,81 @@ class VectorUtil {
             .split(",")
             .map((part) => Number(part.trim()));
     }
-    constructor(length) {
-        this.length = length;
-        this.length = length;
-    }
-    clean(vector) {
-        const size = this.length;
+    constructor() { }
+    static clean(size, vector) {
         return vector
             .map((n) => (isNaN(n) ? 0 : n))
             .concat(new Array(Math.max(size - vector.length, 0)).fill(0))
             .slice(0, size);
     }
-    toString(vector) {
-        return `(${this.clean(vector).join(",")})`;
+    static toString(size, vector) {
+        return `(${this.clean(size, vector).join(",")})`;
     }
-    fromString(value) {
-        return this.clean(VectorUtil.parseVector(value));
-    }
-    isValid(vector) {
-        if (!Array.isArray(vector) || vector.length !== this.length) {
-            return false;
-        }
-        return vector.every((v) => typeof v === "number");
+    static fromString(size, value) {
+        return this.clean(size, VectorUtil.parseVector(value));
     }
 }
 exports.VectorUtil = VectorUtil;
-class DimensionalMap {
+class VecMap {
     vector_size;
     static new() {
-        const size = (size) => new DimensionalMap(size);
+        const size = (size) => new VecMap(size);
         return {
             size,
         };
     }
     map = new Map();
-    vector;
     constructor(vector_size) {
         this.vector_size = vector_size;
-        this.vector_size = vector_size;
-        this.vector = new VectorUtil(this.vector_size);
     }
     set(vector, value) {
-        this.map.set(this.vector.toString(vector), value);
+        this.map.set(VectorUtil.toString(this.vector_size, vector), value);
     }
     get(vector) {
-        return this.map.get(this.vector.toString(vector));
+        return this.map.get(VectorUtil.toString(this.vector_size, vector));
     }
     has(vector) {
-        return this.map.has(this.vector.toString(vector));
+        return this.map.has(VectorUtil.toString(this.vector_size, vector));
     }
     delete(vector) {
-        return this.map.delete(this.vector.toString(vector));
+        return this.map.delete(VectorUtil.toString(this.vector_size, vector));
     }
     clear() {
         this.map.clear();
     }
-    *keys() {
-        for (const key of this.map.keys()) {
-            yield this.vector.fromString(key);
-        }
-    }
     values() {
         return this.map.values();
     }
-    *entries() {
-        for (const [key, value] of this.map.entries()) {
-            yield [this.vector.fromString(key), value];
+    *keys() {
+        for (const key of this.map.keys()) {
+            yield VectorUtil.fromString(this.vector_size, key);
         }
     }
-    get size() {
+    *entries() {
+        for (const [key, value] of this.map.entries()) {
+            yield [VectorUtil.fromString(this.vector_size, key), value];
+        }
+    }
+    getSize() {
         return this.map.size;
     }
 }
-exports.DimensionalMap = DimensionalMap;
+exports.VecMap = VecMap;
+class Vec1D extends VecMap {
+    constructor() {
+        super(1);
+    }
+}
+exports.Vec1D = Vec1D;
+class Vec2D extends VecMap {
+    constructor() {
+        super(2);
+    }
+}
+exports.Vec2D = Vec2D;
+class Vec3D extends VecMap {
+    constructor() {
+        super(3);
+    }
+}
+exports.Vec3D = Vec3D;

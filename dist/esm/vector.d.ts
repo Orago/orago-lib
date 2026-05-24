@@ -77,31 +77,37 @@ interface VectorTypeDict {
     2: [x: number, y: number];
     3: [x: number, y: number, z: number];
 }
-export declare class VectorUtil<const N extends keyof VectorTypeDict, T> {
-    private length;
-    static parseVector(input: string): number[];
-    constructor(length: N);
-    clean(vector: number[]): VectorTypeDict[N];
-    toString(vector: number[]): string;
-    fromString(value: string): VectorTypeDict[N];
-    isValid(vector: unknown): vector is VectorTypeDict[N];
-}
 type VVec<N extends keyof VectorTypeDict, Strict extends boolean> = Strict extends true ? VectorTypeDict[N] : number[];
-export declare class DimensionalMap<const N extends keyof VectorTypeDict, T, Strict extends boolean = true> {
+export declare class VectorUtil {
+    static parseVector(input: string): number[];
+    constructor();
+    private static clean;
+    static toString<N extends keyof VectorTypeDict>(size: N, vector: number[]): string;
+    static fromString<N extends keyof VectorTypeDict>(size: N, value: string): VectorTypeDict[N];
+}
+export declare class VecMap<const N extends keyof VectorTypeDict, T, Strict extends boolean = true> {
     private vector_size;
     static new<T, Strict extends boolean = true>(): {
-        size: <N extends keyof VectorTypeDict>(size: N) => DimensionalMap<N, T, Strict>;
+        size: <N extends keyof VectorTypeDict>(size: N) => VecMap<N, T, Strict>;
     };
     map: Map<string, T>;
-    vector: VectorUtil<N, T>;
     constructor(vector_size: N);
     set(vector: VVec<N, Strict>, value: T): void;
     get(vector: VVec<N, Strict>): T | undefined;
     has(vector: VVec<N, Strict>): boolean;
     delete(vector: VVec<N, Strict>): boolean;
     clear(): void;
-    keys(): Iterator<VectorTypeDict[N]>;
     values(): IterableIterator<T>;
-    entries(): Iterator<[VectorTypeDict[N], T]>;
-    get size(): number;
+    keys(): Generator<VectorTypeDict[N]>;
+    entries(): Generator<[VectorTypeDict[N], T]>;
+    getSize(): number;
+}
+export declare class Vec1D<T> extends VecMap<1, T, true> {
+    constructor();
+}
+export declare class Vec2D<T> extends VecMap<2, T, true> {
+    constructor();
+}
+export declare class Vec3D<T> extends VecMap<3, T, true> {
+    constructor();
 }

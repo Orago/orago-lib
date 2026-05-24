@@ -16,7 +16,12 @@ export const GeometryConversions = {
 	vecToPoint: ([x, y]: VecPoint): Point => ({ x, y }),
 	vecToSize: ([width, height]: VecSize): Size => ({ width, height }),
 	vecToLine: ([x1, y1, x2, y2]: VecLine): Line => ({ x1, y1, x2, y2 }),
-	vecToRectangle: ([width, height]: VecSize): Size => ({ width, height }),
+	vecToRectangle: ([x, y, width, height]: VecRectangle): Rectangle => ({
+		x,
+		y,
+		width,
+		height,
+	}),
 	vecToCircle: ([x, y, radius]: VecCircle): Circle => ({ x, y, radius }),
 	//* Object -> Vec
 	pointToVec: ({ x, y }: Point): VecPoint => [x, y],
@@ -53,6 +58,14 @@ export const GeometryConversions = {
 		y: y + height / 2,
 		radius: Math.min(width, height) / 2,
 	}),
+} as const;
+
+export const vec_offsets = {
+	point: { x: 0, y: 1 },
+	size: { width: 0, height: 1 },
+	rectangle: { x: 0, y: 1, width: 2, height: 3 },
+	line: { x1: 0, y1: 1, x2: 2, y2: 3 },
+	circle: { x: 0, y: 1, radius: 2 },
 } as const;
 
 export class PointUtils {

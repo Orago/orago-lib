@@ -33,7 +33,26 @@ export class PromiseQueue {
 	}
 }
 
-export class QueueChain<S> {
+export class QueueChain {
+	public queue = Promise.resolve();
+
+	public async isDone(): Promise<void> {
+		let current: Promise<void>;
+
+		do {
+			current = this.queue;
+			await current;
+		} while (current !== this.queue);
+	}
+
+	public enqueue<T>(task: () => Promise<T> | T): Promise<T> {
+		const next = this.queue.then(() => task());
+		this.queue = next.then(() => undefined);
+		return next;
+	}
+}
+
+export class QueueRef<S> {
 	public queue = Promise.resolve();
 	constructor(private source: S) {}
 

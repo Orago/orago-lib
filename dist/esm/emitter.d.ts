@@ -21,9 +21,9 @@ declare class Signal<T extends (...args: any[]) => any = () => void> {
     once(callback: T): this;
 }
 declare class DebouncedSignal<T extends (...args: any[]) => any> extends Signal<T> {
+    delay: number;
     private timer;
-    readonly delay: number;
-    constructor(delay_ms: number);
+    constructor(delay: number);
     forceEmit(...args: Parameters<T>): this;
     emit(...args: Parameters<T>): this;
     cancel(): void;
@@ -33,7 +33,7 @@ declare class State<T> {
     readonly change: Signal<(value: T, old_value: T) => void>;
     constructor(_value: T);
     protected shouldUpdate(value: T): boolean;
-    protected transform(value: T): T;
+    protected transform<IN = any>(value: IN): T;
     get(): T;
     set(next: T): void;
     value(): T;

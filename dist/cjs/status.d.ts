@@ -1,16 +1,16 @@
 type NonVoid<T> = T extends void ? undefined : T;
-declare class Status<S extends boolean = boolean, Data = void> {
+declare class Status<S extends boolean = boolean, Data = any> {
     status: S;
     text: string;
     static Success: {
-        new <Data_1 = void>(text?: string, data?: NonVoid<Data_1> | undefined): {
+        new <Data_1 = any>(text?: string, data?: NonVoid<Data_1> | undefined): {
             data: NonVoid<Data_1>;
             status: true;
             text: string;
         };
         Success: any;
         Error: {
-            new <Data_2 = void>(text?: string, data?: NonVoid<Data_2> | undefined): {
+            new <Data_2 = any>(text?: string, data?: NonVoid<Data_2> | undefined): {
                 data: NonVoid<Data_2>;
                 status: false;
                 text: string;
@@ -20,13 +20,13 @@ declare class Status<S extends boolean = boolean, Data = void> {
         };
     };
     static Error: {
-        new <Data_1 = void>(text?: string, data?: NonVoid<Data_1> | undefined): {
+        new <Data_1 = any>(text?: string, data?: NonVoid<Data_1> | undefined): {
             data: NonVoid<Data_1>;
             status: false;
             text: string;
         };
         Success: {
-            new <Data_2 = void>(text?: string, data?: NonVoid<Data_2> | undefined): {
+            new <Data_2 = any>(text?: string, data?: NonVoid<Data_2> | undefined): {
                 data: NonVoid<Data_2>;
                 status: true;
                 text: string;

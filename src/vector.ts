@@ -186,7 +186,12 @@ interface VectorTypeDict {
 	3: [x: number, y: number, z: number];
 }
 
-export class VectorUtil<const N extends keyof VectorTypeDict, T> {
+type VVec<
+	N extends keyof VectorTypeDict,
+	Strict extends boolean
+> = Strict extends true ? VectorTypeDict[N] : number[];
+
+export class VectorUtil {
 	static parseVector(input: string): number[] {
 		const regex = /^\(\s*-?\d+(\s*,\s*-?\d+)*\s*\)$/;
 
@@ -199,13 +204,12 @@ export class VectorUtil<const N extends keyof VectorTypeDict, T> {
 			.split(",")
 			.map((part) => Number(part.trim()));
 	}
-	constructor(private length: N) {
-		this.length = length;
-	}
+	constructor() {}
 
-	clean(vector: number[]) {
-		const size = this.length;
-
+	private static clean<N extends keyof VectorTypeDict>(
+		size: N,
+		vector: number[]
+	) {
 		return (
 			vector
 				// convert to number
@@ -217,84 +221,73 @@ export class VectorUtil<const N extends keyof VectorTypeDict, T> {
 		);
 	}
 
-	toString(vector: number[]): string {
-		return `(${this.clean(vector).join(",")})`;
+	public static toString<N extends keyof VectorTypeDict>(
+		size: N,
+		vector: number[]
+	): string {
+		return `(${this.clean(size, vector).join(",")})`;
 	}
 
-	fromString(value: string): VectorTypeDict[N] {
-		return this.clean(VectorUtil.parseVector(value));
-	}
-
-	isValid(vector: unknown): vector is VectorTypeDict[N] {
-		if (!Array.isArray(vector) || vector.length !== this.length) {
-			return false;
-		}
-
-		return vector.every((v) => typeof v === "number");
+	public static fromString<N extends keyof VectorTypeDict>(
+		size: N,
+		value: string
+	): VectorTypeDict[N] {
+		return this.clean(size, VectorUtil.parseVector(value));
 	}
 }
 
-type VVec<
-	N extends keyof VectorTypeDict,
-	Strict extends boolean
-> = Strict extends true ? VectorTypeDict[N] : number[];
-
-export class DimensionalMap<
+export class VecMap<
 	const N extends keyof VectorTypeDict,
 	T,
 	Strict extends boolean = true
 > {
 	static new<T, Strict extends boolean = true>() {
 		const size = <N extends keyof VectorTypeDict>(size: N) =>
-			new DimensionalMap<N, T, Strict>(size);
+			new VecMap<N, T, Strict>(size);
 		return {
 			size,
 		};
 	}
 
 	map: Map<string, T> = new Map();
-	vector: VectorUtil<N, T>;
 
-	constructor(private vector_size: N) {
-		this.vector_size = vector_size;
-		this.vector = new VectorUtil(this.vector_size);
-	}
+	constructor(private vector_size: N) {}
 
 	set(vector: VVec<N, Strict>, value: T) {
-		this.map.set(this.vector.toString(vector), value);
+		this.map.set(VectorUtil.toString(this.vector_size, vector), value);
 	}
 
 	get(vector: VVec<N, Strict>): T | undefined {
-		return this.map.get(this.vector.toString(vector));
+		return this.map.get(VectorUtil.toString(this.vector_size, vector));
 	}
 
 	has(vector: VVec<N, Strict>): boolean {
-		return this.map.has(this.vector.toString(vector));
+		return this.map.has(VectorUtil.toString(this.vector_size, vector));
 	}
 
 	delete(vector: VVec<N, Strict>): boolean {
-		return this.map.delete(this.vector.toString(vector));
+		return this.map.delete(VectorUtil.toString(this.vector_size, vector));
 	}
 
 	clear() {
 		this.map.clear();
 	}
-	
+
 	values() {
 		return this.map.values();
 	}
 
-	*keys(): MapIterator<VectorTypeDict[N]> {
+	*keys(): Generator<VectorTypeDict[N]> {
 		for (const key of this.map.keys()) {
-			yield this.vector.fromString(key);
+			yield VectorUtil.fromString(this.vector_size, key);
 		}
 
 		// Array.from(this.map.keys()).map((key) => this.vector.fromString(key));
 	}
 
-	*entries(): MapIterator<[VectorTypeDict[N], T]> {
+	*entries(): Generator<[VectorTypeDict[N], T]> {
 		for (const [key, value] of this.map.entries()) {
-			yield [this.vector.fromString(key), value];
+			yield [VectorUtil.fromString(this.vector_size, key), value];
 		}
 
 		// return Array.from(this.map.entries()).map(([key, value]) => {
@@ -302,7 +295,23 @@ export class DimensionalMap<
 		// });
 	}
 
-	get size() {
+	getSize(): number {
 		return this.map.size;
+	}
+}
+
+export class Vec1D<T> extends VecMap<1, T, true> {
+	constructor() {
+		super(1);
+	}
+}
+export class Vec2D<T> extends VecMap<2, T, true> {
+	constructor() {
+		super(2);
+	}
+}
+export class Vec3D<T> extends VecMap<3, T, true> {
+	constructor() {
+		super(3);
 	}
 }

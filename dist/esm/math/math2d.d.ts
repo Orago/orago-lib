@@ -3,7 +3,7 @@ export declare const GeometryConversions: {
     readonly vecToPoint: ([x, y]: VecPoint) => Point;
     readonly vecToSize: ([width, height]: VecSize) => Size;
     readonly vecToLine: ([x1, y1, x2, y2]: VecLine) => Line;
-    readonly vecToRectangle: ([width, height]: VecSize) => Size;
+    readonly vecToRectangle: ([x, y, width, height]: VecRectangle) => Rectangle;
     readonly vecToCircle: ([x, y, radius]: VecCircle) => Circle;
     readonly pointToVec: ({ x, y }: Point) => VecPoint;
     readonly sizeToVec: ({ width, height }: Size) => VecSize;
@@ -13,6 +13,33 @@ export declare const GeometryConversions: {
     readonly sizeToRectangle: (size: Size) => Rectangle;
     readonly circleToRectangle: ({ x, y, radius }: Circle) => Rectangle;
     readonly rectangleToCircle: ({ x, y, width, height }: Rectangle) => Circle;
+};
+export declare const vec_offsets: {
+    readonly point: {
+        readonly x: 0;
+        readonly y: 1;
+    };
+    readonly size: {
+        readonly width: 0;
+        readonly height: 1;
+    };
+    readonly rectangle: {
+        readonly x: 0;
+        readonly y: 1;
+        readonly width: 2;
+        readonly height: 3;
+    };
+    readonly line: {
+        readonly x1: 0;
+        readonly y1: 1;
+        readonly x2: 2;
+        readonly y2: 3;
+    };
+    readonly circle: {
+        readonly x: 0;
+        readonly y: 1;
+        readonly radius: 2;
+    };
 };
 export declare class PointUtils {
     static distance(a: Point, b: Point): number;

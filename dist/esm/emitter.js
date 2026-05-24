@@ -98,11 +98,11 @@ class Signal {
     }
 }
 class DebouncedSignal extends Signal {
-    timer = null;
     delay;
-    constructor(delay_ms) {
+    timer = null;
+    constructor(delay) {
         super();
-        this.delay = delay_ms;
+        this.delay = delay;
     }
     forceEmit(...args) {
         return super.emit(...args);

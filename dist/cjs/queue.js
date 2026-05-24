@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PromiseQueue = void 0;
+exports.QueueRef = exports.QueueChain = exports.PromiseQueue = void 0;
 class PromiseQueue {
     queue = [];
     is_processing = false;
@@ -31,3 +31,39 @@ class PromiseQueue {
     }
 }
 exports.PromiseQueue = PromiseQueue;
+class QueueChain {
+    queue = Promise.resolve();
+    async isDone() {
+        let current;
+        do {
+            current = this.queue;
+            await current;
+        } while (current !== this.queue);
+    }
+    enqueue(task) {
+        const next = this.queue.then(() => task());
+        this.queue = next.then(() => undefined);
+        return next;
+    }
+}
+exports.QueueChain = QueueChain;
+class QueueRef {
+    source;
+    queue = Promise.resolve();
+    constructor(source) {
+        this.source = source;
+    }
+    async isDone() {
+        let current;
+        do {
+            current = this.queue;
+            await current;
+        } while (current !== this.queue);
+    }
+    enqueue(task) {
+        const next = this.queue.then(() => task(this.source));
+        this.queue = next.then(() => undefined);
+        return next;
+    }
+}
+exports.QueueRef = QueueRef;

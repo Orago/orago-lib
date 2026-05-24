@@ -1,5 +1,10 @@
 import { clamp, flipRotate } from "./math/functions.js";
-import { GeometryConversions, PointUtils, RectUtils } from "./math/math2d.js";
+import {
+	GeometryConversions,
+	PointUtils,
+	RectUtils,
+	vec_offsets,
+} from "./math/math2d.js";
 import type { Line, Point, Rectangle, Size } from "./math/types.js";
 export {
 	clamp,
@@ -15,9 +20,10 @@ export class Geometry {
 	static readonly Conversions = GeometryConversions;
 
 	//* Utility classes
-
 	static readonly Point = PointUtils;
 	static readonly Rect = RectUtils;
+
+	static VecOffset = vec_offsets;
 
 	//* Methods
 	static readonly flipRotate = flipRotate;

@@ -1,5 +1,5 @@
 export { makeCallableClass, trapValue } from "./class.js";
-export { PromiseQueue, QueueChain } from "./queue.js";
+export { PromiseQueue, QueueRef, QueueChain } from "./queue.js";
 export {
 	default as Emitter,
 	Signal,

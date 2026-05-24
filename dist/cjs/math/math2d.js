@@ -1,11 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RectUtils = exports.PointUtils = exports.GeometryConversions = void 0;
+exports.RectUtils = exports.PointUtils = exports.vec_offsets = exports.GeometryConversions = void 0;
 exports.GeometryConversions = {
     vecToPoint: ([x, y]) => ({ x, y }),
     vecToSize: ([width, height]) => ({ width, height }),
     vecToLine: ([x1, y1, x2, y2]) => ({ x1, y1, x2, y2 }),
-    vecToRectangle: ([width, height]) => ({ width, height }),
+    vecToRectangle: ([x, y, width, height]) => ({
+        x,
+        y,
+        width,
+        height,
+    }),
     vecToCircle: ([x, y, radius]) => ({ x, y, radius }),
     pointToVec: ({ x, y }) => [x, y],
     sizeToVec: ({ width, height }) => [width, height],
@@ -34,6 +39,13 @@ exports.GeometryConversions = {
         y: y + height / 2,
         radius: Math.min(width, height) / 2,
     }),
+};
+exports.vec_offsets = {
+    point: { x: 0, y: 1 },
+    size: { width: 0, height: 1 },
+    rectangle: { x: 0, y: 1, width: 2, height: 3 },
+    line: { x1: 0, y1: 1, x2: 2, y2: 3 },
+    circle: { x: 0, y: 1, radius: 2 },
 };
 class PointUtils {
     static distance(a, b) {
