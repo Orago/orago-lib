@@ -81,7 +81,7 @@ type VVec<N extends keyof VectorTypeDict, Strict extends boolean> = Strict exten
 export declare class VectorUtil {
     static parseVector(input: string): number[];
     constructor();
-    private static clean;
+    static clean<N extends keyof VectorTypeDict>(size: N, vector: number[]): VectorTypeDict[N];
     static toString<N extends keyof VectorTypeDict>(size: N, vector: number[]): string;
     static fromString<N extends keyof VectorTypeDict>(size: N, value: string): VectorTypeDict[N];
 }
@@ -101,6 +101,7 @@ export declare class VecMap<const N extends keyof VectorTypeDict, T, Strict exte
     keys(): Generator<VectorTypeDict[N]>;
     entries(): Generator<[VectorTypeDict[N], T]>;
     getSize(): number;
+    vec(vec: [x: number, y: number]): VectorTypeDict[N];
 }
 export declare class Vec1D<T> extends VecMap<1, T, true> {
     constructor();

@@ -206,7 +206,7 @@ export class VectorUtil {
 	}
 	constructor() {}
 
-	private static clean<N extends keyof VectorTypeDict>(
+	public static clean<N extends keyof VectorTypeDict>(
 		size: N,
 		vector: number[]
 	) {
@@ -297,6 +297,10 @@ export class VecMap<
 
 	getSize(): number {
 		return this.map.size;
+	}
+
+	vec(vec: [x: number, y: number]): VectorTypeDict[N] {
+		return VectorUtil.clean(this.vector_size, vec);
 	}
 }
 

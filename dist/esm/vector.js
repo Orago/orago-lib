@@ -204,6 +204,9 @@ export class VecMap {
     getSize() {
         return this.map.size;
     }
+    vec(vec) {
+        return VectorUtil.clean(this.vector_size, vec);
+    }
 }
 export class Vec1D extends VecMap {
     constructor() {
