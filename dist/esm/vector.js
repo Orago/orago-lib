@@ -209,16 +209,25 @@ export class VecMap {
     }
 }
 export class Vec1D extends VecMap {
+    static vec(vec) {
+        return VectorUtil.clean(1, vec);
+    }
     constructor() {
         super(1);
     }
 }
 export class Vec2D extends VecMap {
+    static vec(vec) {
+        return VectorUtil.clean(2, vec);
+    }
     constructor() {
         super(2);
     }
 }
 export class Vec3D extends VecMap {
+    static vec(vec) {
+        return VectorUtil.clean(3, vec);
+    }
     constructor() {
         super(3);
     }

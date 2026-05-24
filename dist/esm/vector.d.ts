@@ -101,14 +101,17 @@ export declare class VecMap<const N extends keyof VectorTypeDict, T, Strict exte
     keys(): Generator<VectorTypeDict[N]>;
     entries(): Generator<[VectorTypeDict[N], T]>;
     getSize(): number;
-    vec(vec: [x: number, y: number]): VectorTypeDict[N];
+    vec(vec: VectorTypeDict[N]): VectorTypeDict[N];
 }
 export declare class Vec1D<T> extends VecMap<1, T, true> {
+    static vec(vec: VectorTypeDict[1]): VectorTypeDict[1];
     constructor();
 }
 export declare class Vec2D<T> extends VecMap<2, T, true> {
+    static vec(vec: VectorTypeDict[2]): VectorTypeDict[2];
     constructor();
 }
 export declare class Vec3D<T> extends VecMap<3, T, true> {
+    static vec(vec: VectorTypeDict[3]): VectorTypeDict[3];
     constructor();
 }

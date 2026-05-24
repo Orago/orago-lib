@@ -299,22 +299,31 @@ export class VecMap<
 		return this.map.size;
 	}
 
-	vec(vec: [x: number, y: number]): VectorTypeDict[N] {
+	vec(vec: VectorTypeDict[N]): VectorTypeDict[N] {
 		return VectorUtil.clean(this.vector_size, vec);
 	}
 }
 
 export class Vec1D<T> extends VecMap<1, T, true> {
+	static vec(vec: VectorTypeDict[1]): VectorTypeDict[1] {
+		return VectorUtil.clean(1, vec);
+	}
 	constructor() {
 		super(1);
 	}
 }
 export class Vec2D<T> extends VecMap<2, T, true> {
+	static vec(vec: VectorTypeDict[2]): VectorTypeDict[2] {
+		return VectorUtil.clean(2, vec);
+	}
 	constructor() {
 		super(2);
 	}
 }
 export class Vec3D<T> extends VecMap<3, T, true> {
+	static vec(vec: VectorTypeDict[3]): VectorTypeDict[3] {
+		return VectorUtil.clean(3, vec);
+	}
 	constructor() {
 		super(3);
 	}
