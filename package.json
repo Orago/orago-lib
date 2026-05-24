@@ -59,6 +59,10 @@
 		"./data/buffer": {
 			"import": "./dist/esm/data/buffer.js",
 			"require": "./dist/cjs/data/buffer.js"
+		},
+		"./flat-json": {
+			"import": "./dist/esm/data/flat-json.js",
+			"require": "./dist/cjs/data/flat-json.js"
 		}
 	},
 	"typesVersions": {
