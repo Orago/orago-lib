@@ -189,15 +189,16 @@ class DebouncedSignal<T extends (...args: any[]) => any> extends Signal<T> {
 
 class State<T> {
 	public readonly change = new Signal<(value: T, old_value: T) => void>();
+	public readonly transforms: ((value: T, initial: T) => T)[] = [];
+	public readonly validators: ((value: T) => boolean)[] = [];
 
 	constructor(private _value: T) {}
 
-	protected shouldUpdate(value: T): boolean {
-		return this._value !== value;
-	}
-
-	protected transform<IN = any>(value: IN): T {
-		return value as unknown as T;
+	public validate(value: any): value is T {
+		if (this.validators.length > 0) {
+			return this.validators.every((callback) => callback(value));
+		}
+		return true;
 	}
 
 	public get(): T {
@@ -205,9 +206,13 @@ class State<T> {
 	}
 
 	public set(next: T) {
-		const value = this.transform(next);
+		let value = next;
 
-		if (this.shouldUpdate(value)) {
+		for (const transform of this.transforms) {
+			value = transform(value, next);
+		}
+
+		if (this.validate(value)) {
 			const old_value = this._value;
 			this._value = value;
 			this.change.emit(this._value, old_value);
@@ -223,6 +228,14 @@ class State<T> {
 			this.set(args[0]!);
 			return this;
 		}
+	}
+
+	public use(plugins: ((node: this) => void)[]): this {
+		for (const plugin of plugins) {
+			plugin(this);
+		}
+
+		return this;
 	}
 }
 

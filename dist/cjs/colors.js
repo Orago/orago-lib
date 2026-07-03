@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.stringToRGBArray = exports.rgbToHue = exports.tryRGB_Cached = exports.forceRgb = exports.tryRgb = exports.getRGBValues = exports.isRGB = exports.convertHexToRGB = exports.isHexadecimal = exports.convertWordColorToRGB = exports.isWordColor = exports.wordsToRgb = exports.RgbUtil = exports.HexUtil = exports.DecimalUtil = exports.Color = void 0;
+exports.stringToRGBArray = exports.rgbToHue = exports.tryRGB_Cached = exports.forceRgb = exports.tryRgb = exports.getRGBValues = exports.isRGB = exports.convertHexToRGBA = exports.convertHexToRGB = exports.isHexadecimal = exports.convertWordColorToRGB = exports.isWordColor = exports.wordsToRgb = exports.RgbUtil = exports.HexUtil = exports.DecimalUtil = exports.Color = void 0;
 var color_js_1 = require("./color-utility/color.js");
 Object.defineProperty(exports, "Color", { enumerable: true, get: function () { return color_js_1.default; } });
 var decimal_js_1 = require("./color-utility/decimal.js");
@@ -55,6 +55,15 @@ function convertHexToRGB(hexColor) {
     return [red, green, blue];
 }
 exports.convertHexToRGB = convertHexToRGB;
+function convertHexToRGBA(hexColor) {
+    const hex = hexColor.replace("#", "");
+    const red = parseInt(hex.substring(0, 2), 16);
+    const green = parseInt(hex.substring(2, 4), 16);
+    const blue = parseInt(hex.substring(4, 6), 16);
+    const alpha = parseInt(hex.substring(6, 8), 16) || 255;
+    return [red, green, blue, alpha];
+}
+exports.convertHexToRGBA = convertHexToRGBA;
 const rgbStringRegex = /^rgb\(\s*((1?[0-9]{1,2}|2([0-4][0-9]|5[0-5])),\s*){2}(1?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))\s*\)$/;
 function isRGB(rgbString) {
     return rgbStringRegex.test(rgbString);

@@ -127,21 +127,26 @@ class DebouncedSignal extends Signal {
 class State {
     _value;
     change = new Signal();
+    transforms = [];
+    validators = [];
     constructor(_value) {
         this._value = _value;
     }
-    shouldUpdate(value) {
-        return this._value !== value;
-    }
-    transform(value) {
-        return value;
+    validate(value) {
+        if (this.validators.length > 0) {
+            return this.validators.every((callback) => callback(value));
+        }
+        return true;
     }
     get() {
         return this._value;
     }
     set(next) {
-        const value = this.transform(next);
-        if (this.shouldUpdate(value)) {
+        let value = next;
+        for (const transform of this.transforms) {
+            value = transform(value, next);
+        }
+        if (this.validate(value)) {
             const old_value = this._value;
             this._value = value;
             this.change.emit(this._value, old_value);
@@ -155,6 +160,12 @@ class State {
             this.set(args[0]);
             return this;
         }
+    }
+    use(plugins) {
+        for (const plugin of plugins) {
+            plugin(this);
+        }
+        return this;
     }
 }
 export { Emitter as default, Emitter, Signal, DebouncedSignal, State };

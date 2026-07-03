@@ -10,6 +10,7 @@ export declare function isWordColor(input: string): boolean;
 export declare function convertWordColorToRGB(input: string): [red: number, green: number, blue: number];
 export declare function isHexadecimal(hexcode: string): boolean;
 export declare function convertHexToRGB(hexColor: string): [red: number, green: number, blue: number];
+export declare function convertHexToRGBA(hexColor: string): [red: number, green: number, blue: number, alpha: number];
 export declare function isRGB(rgbString: string): boolean;
 export declare function getRGBValues(input: string): RgbArray;
 export declare function tryRgb(input: string | RgbArray): RgbArray | null;

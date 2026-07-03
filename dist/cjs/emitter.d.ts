@@ -31,13 +31,15 @@ declare class DebouncedSignal<T extends (...args: any[]) => any> extends Signal<
 declare class State<T> {
     private _value;
     readonly change: Signal<(value: T, old_value: T) => void>;
+    readonly transforms: ((value: T, initial: T) => T)[];
+    readonly validators: ((value: T) => boolean)[];
     constructor(_value: T);
-    protected shouldUpdate(value: T): boolean;
-    protected transform<IN = any>(value: IN): T;
+    validate(value: any): value is T;
     get(): T;
     set(next: T): void;
     value(): T;
     value(value: T): this;
+    use(plugins: ((node: this) => void)[]): this;
 }
 export { Emitter as default, Emitter, Signal, DebouncedSignal, State };
 export type { EmitterEvents, Evt, CallbackListen, CallbackEmit };

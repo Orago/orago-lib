@@ -44,6 +44,14 @@ export function convertHexToRGB(hexColor) {
     const blue = parseInt(hex.substring(4, 6), 16);
     return [red, green, blue];
 }
+export function convertHexToRGBA(hexColor) {
+    const hex = hexColor.replace("#", "");
+    const red = parseInt(hex.substring(0, 2), 16);
+    const green = parseInt(hex.substring(2, 4), 16);
+    const blue = parseInt(hex.substring(4, 6), 16);
+    const alpha = parseInt(hex.substring(6, 8), 16) || 255;
+    return [red, green, blue, alpha];
+}
 const rgbStringRegex = /^rgb\(\s*((1?[0-9]{1,2}|2([0-4][0-9]|5[0-5])),\s*){2}(1?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))\s*\)$/;
 export function isRGB(rgbString) {
     return rgbStringRegex.test(rgbString);
