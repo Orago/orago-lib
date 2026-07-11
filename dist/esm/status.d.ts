@@ -1,4 +1,9 @@
 type NonVoid<T> = T extends void ? undefined : T;
+interface StatusLike<S extends boolean = boolean, Data = any> {
+    data: NonVoid<Data>;
+    status: S;
+    text: string;
+}
 declare class Status<S extends boolean = boolean, Data = any> {
     status: S;
     text: string;
@@ -39,4 +44,4 @@ declare class Status<S extends boolean = boolean, Data = any> {
     data: NonVoid<Data>;
     constructor(status: S, text?: string, data?: NonVoid<Data>);
 }
-export { Status as default, Status };
+export { Status as default, Status, StatusLike };

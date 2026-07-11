@@ -1,3 +1,4 @@
+import Status from "./status.js";
 class SchemaUtil {
     static createError(path, message) {
         throw {
@@ -5,21 +6,40 @@ class SchemaUtil {
             message,
         };
     }
+    static consumeTransforms(value, transforms) {
+        return transforms.reduce((prev, curr) => curr(prev), value);
+    }
     static validate(schema, value, path = []) {
         switch (schema.type) {
+            case "null": {
+                if (typeof value != "undefined" && value != null) {
+                    SchemaUtil.createError(path, "Expected null");
+                }
+                if (schema.cast == "null") {
+                    return null;
+                }
+                else if (schema.cast == "undefined") {
+                    return undefined;
+                }
+                else {
+                    return value;
+                }
+            }
             case "string": {
+                value ??=
+                    typeof schema.default == "function"
+                        ? schema.default()
+                        : schema.default;
                 if (typeof value !== "string") {
                     SchemaUtil.createError(path, "Expected string");
                 }
-                if (schema.transform != undefined) {
-                    value = schema.transform(value);
+                if (schema.transforms != undefined) {
+                    value = SchemaUtil.consumeTransforms(value, schema.transforms);
                 }
-                if (schema.minLength != undefined &&
-                    schema.minLength > value.length) {
+                if (schema.min != undefined && schema.min > value.length) {
                     SchemaUtil.createError(path, "String length too short");
                 }
-                if (schema.maxLength != undefined &&
-                    schema.maxLength < value.length) {
+                if (schema.max != undefined && schema.max < value.length) {
                     SchemaUtil.createError(path, "String length too long");
                 }
                 if (schema.includes != undefined &&
@@ -29,8 +49,15 @@ class SchemaUtil {
                 return value;
             }
             case "number": {
+                value ??=
+                    typeof schema.default == "function"
+                        ? schema.default()
+                        : schema.default;
                 if (typeof value !== "number") {
                     SchemaUtil.createError(path, "Expected number");
+                }
+                if (schema.transforms != undefined) {
+                    value = SchemaUtil.consumeTransforms(value, schema.transforms);
                 }
                 if (schema.min != undefined && schema.min > value) {
                     SchemaUtil.createError(path, "Number is too small");
@@ -56,6 +83,12 @@ class SchemaUtil {
             case "array": {
                 if (!Array.isArray(value)) {
                     SchemaUtil.createError(path, "Expected array");
+                }
+                if (schema.min != undefined && schema.min > value.length) {
+                    SchemaUtil.createError(path, "Array length too short");
+                }
+                if (schema.max != undefined && schema.max < value.length) {
+                    SchemaUtil.createError(path, "Array length too long");
                 }
                 return value.map((v, i) => SchemaUtil.validate(schema.items, v, [...path, String(i)]));
             }
@@ -112,33 +145,42 @@ class SanitySchemaMini {
         return { type: "object", properties, ...options };
     }
 }
-class SanitySchema {
-    static s = SanitySchemaMini;
-    static validate = SchemaUtil.validate;
+class Parser {
     static parse(schema, data) {
         return SchemaUtil.validate(schema, data);
     }
     static safeParse(schema, data) {
         try {
-            let g = data;
-            return { success: true, data: this.parse(schema, g) };
+            return new Status.Success(undefined, this.parse(schema, data));
         }
         catch (e) {
-            return { success: false, error: e };
+            return new Status.Error(e);
         }
     }
+}
+class ParserStrict {
     static parseStrict(schema, data) {
         let g = data;
         return SchemaUtil.validate(schema, g);
     }
     static safeParseStrict(schema, data) {
         try {
-            let g = data;
-            return { success: true, data: this.parse(schema, g) };
+            return new Status.Success(undefined, Parser.parse(schema, data));
         }
         catch (e) {
-            return { success: false, error: e };
+            return new Status.Error(e);
         }
     }
+}
+class SanitySchema {
+    static Utility = SchemaUtil;
+    static s = SanitySchemaMini;
+    static validate = SchemaUtil.validate;
+    static define(schema) {
+        return schema;
+    }
+    static parse = Parser.parse;
+    static safeParse = Parser.safeParse;
+    static Strict = ParserStrict;
 }
 export { SanitySchema, SanitySchemaMini, SanitySchemaMini as s, };
