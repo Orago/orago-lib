@@ -33,6 +33,10 @@ class SchemaUtil {
                     typeof schema.default == "function"
                         ? schema.default()
                         : schema.default;
+                if (schema.coerce == true &&
+                    (typeof value == "number" || typeof value == "boolean")) {
+                    value = String(value);
+                }
                 if (typeof value !== "string") {
                     SchemaUtil.createError(path, "Expected string");
                 }
@@ -56,6 +60,10 @@ class SchemaUtil {
                     typeof schema.default == "function"
                         ? schema.default()
                         : schema.default;
+                if (schema.coerce == true &&
+                    (typeof value == "string" || typeof value == "boolean")) {
+                    value = Number(value);
+                }
                 if (typeof value !== "number") {
                     SchemaUtil.createError(path, "Expected number");
                 }
@@ -69,7 +77,7 @@ class SchemaUtil {
                     SchemaUtil.createError(path, "Number is too big");
                 }
                 if (schema.round != undefined) {
-                    value = Math.ceil(value / schema.round) * schema.round;
+                    value = Math.floor(value / schema.round) * schema.round;
                 }
                 if (schema.includes != undefined &&
                     schema.includes.includes(value) != true) {
@@ -78,6 +86,15 @@ class SchemaUtil {
                 return value;
             }
             case "boolean": {
+                if (schema.coerce == true) {
+                    if (value == "true" || value == 1) {
+                        value = true;
+                    }
+                    else if (value == "false" || value == 0) {
+                        value = false;
+                    }
+                    value = Number(value);
+                }
                 if (typeof value != "boolean") {
                     SchemaUtil.createError(path, "Expected boolean");
                 }

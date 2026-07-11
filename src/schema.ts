@@ -7,6 +7,7 @@ type StringSchema = {
 	type: "string";
 	default?: string | (() => string);
 	transforms?: ((value: string) => string)[];
+	coerce?: boolean;
 	includes?: string[];
 	/** minimum length */
 	min?: number;
@@ -18,6 +19,7 @@ type NumberSchema = {
 	type: "number";
 	default?: number | (() => number);
 	transforms?: ((value: number) => number)[];
+	coerce?: boolean;
 	includes?: number[];
 	round?: number;
 	/** minimum size */
@@ -29,6 +31,7 @@ type NumberSchema = {
 type BooleanSchema = {
 	type: "boolean";
 	default?: boolean;
+	coerce?: boolean;
 };
 
 type ArraySchema<T extends Schema> = {
@@ -166,6 +169,13 @@ class SchemaUtil {
 						? schema.default()
 						: schema.default;
 
+				if (
+					schema.coerce == true &&
+					(typeof value == "number" || typeof value == "boolean")
+				) {
+					value = String(value);
+				}
+
 				if (typeof value !== "string") {
 					SchemaUtil.createError(path, "Expected string");
 				}
@@ -203,6 +213,13 @@ class SchemaUtil {
 						? schema.default()
 						: schema.default;
 
+				if (
+					schema.coerce == true &&
+					(typeof value == "string" || typeof value == "boolean")
+				) {
+					value = Number(value);
+				}
+
 				if (typeof value !== "number") {
 					SchemaUtil.createError(path, "Expected number");
 				}
@@ -223,7 +240,7 @@ class SchemaUtil {
 				}
 
 				if (schema.round != undefined) {
-					value = Math.ceil(value / schema.round) * schema.round;
+					value = Math.floor(value / schema.round) * schema.round;
 				}
 
 				if (
@@ -239,6 +256,16 @@ class SchemaUtil {
 			}
 
 			case "boolean": {
+				if (schema.coerce == true) {
+					if (value == "true" || value == 1) {
+						value = true;
+					} else if (value == "false" || value == 0) {
+						value = false;
+					}
+
+					value = Number(value);
+				}
+
 				if (typeof value != "boolean") {
 					SchemaUtil.createError(path, "Expected boolean");
 				}

@@ -7,6 +7,7 @@ type StringSchema = {
     type: "string";
     default?: string | (() => string);
     transforms?: ((value: string) => string)[];
+    coerce?: boolean;
     includes?: string[];
     min?: number;
     max?: number;
@@ -15,6 +16,7 @@ type NumberSchema = {
     type: "number";
     default?: number | (() => number);
     transforms?: ((value: number) => number)[];
+    coerce?: boolean;
     includes?: number[];
     round?: number;
     min?: number;
@@ -23,6 +25,7 @@ type NumberSchema = {
 type BooleanSchema = {
     type: "boolean";
     default?: boolean;
+    coerce?: boolean;
 };
 type ArraySchema<T extends Schema> = {
     type: "array";
