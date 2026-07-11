@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OraLib = exports.ColorUtil = exports.StringUtil = exports.MathUtil = exports.OraColor = exports.OraString = exports.Cooldown = exports.Vector = exports.OraMath = exports.Geometry = exports.Status = exports.State = exports.DebouncedSignal = exports.Signal = exports.Emitter = exports.QueueChain = exports.QueueRef = exports.PromiseQueue = exports.trapValue = exports.makeCallableClass = void 0;
+exports.OraLib = exports.Schema = exports.ColorUtil = exports.StringUtil = exports.MathUtil = exports.OraColor = exports.OraString = exports.Cooldown = exports.Vector = exports.OraMath = exports.Geometry = exports.Status = exports.State = exports.DebouncedSignal = exports.Signal = exports.Emitter = exports.QueueChain = exports.QueueRef = exports.PromiseQueue = exports.trapValue = exports.makeCallableClass = void 0;
 var class_js_1 = require("./class.js");
 Object.defineProperty(exports, "makeCallableClass", { enumerable: true, get: function () { return class_js_1.makeCallableClass; } });
 Object.defineProperty(exports, "trapValue", { enumerable: true, get: function () { return class_js_1.trapValue; } });
@@ -25,6 +25,7 @@ exports.OraColor = require("./colors.js");
 exports.MathUtil = require("./math.js");
 exports.StringUtil = require("./string.js");
 exports.ColorUtil = require("./colors.js");
+exports.Schema = require("./schema.js");
 class OraLib {
 }
 exports.OraLib = OraLib;

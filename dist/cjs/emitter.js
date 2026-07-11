@@ -134,6 +134,7 @@ exports.DebouncedSignal = DebouncedSignal;
 class State {
     _value;
     change = new Signal();
+    events = new Emitter();
     transforms = [];
     validators = [];
     constructor(_value) {

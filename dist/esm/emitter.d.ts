@@ -28,9 +28,10 @@ declare class DebouncedSignal<T extends (...args: any[]) => any> extends Signal<
     emit(...args: Parameters<T>): this;
     cancel(): void;
 }
-declare class State<T> {
+declare class State<T = any, Events extends EmitterEvents & {} = any> {
     private _value;
     readonly change: Signal<(value: T, old_value: T) => void>;
+    readonly events: Emitter<Events>;
     readonly transforms: ((value: T, initial: T) => T)[];
     readonly validators: ((value: T) => boolean)[];
     constructor(_value: T);

@@ -6,6 +6,7 @@ type CallbackListen<T, K> = K extends keyof T ? T[K] : Function;
 type CallbackEmit<T extends EmitterEvents, K> = K extends keyof T
 	? Parameters<T[K]>
 	: any[];
+
 class Emitter<
 	T extends EmitterEvents & {} = {},
 	Strict extends boolean = false
@@ -187,8 +188,9 @@ class DebouncedSignal<T extends (...args: any[]) => any> extends Signal<T> {
 	}
 }
 
-class State<T> {
+class State<T = any, Events extends EmitterEvents & {} = any> {
 	public readonly change = new Signal<(value: T, old_value: T) => void>();
+	public readonly events: Emitter<Events> = new Emitter();
 	public readonly transforms: ((value: T, initial: T) => T)[] = [];
 	public readonly validators: ((value: T) => boolean)[] = [];
 

@@ -11,5 +11,6 @@ export * as OraColor from "./colors.js";
 export * as MathUtil from "./math.js";
 export * as StringUtil from "./string.js";
 export * as ColorUtil from "./colors.js";
+export * as Schema from "./schema.js";
 export declare class OraLib {
 }

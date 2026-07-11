@@ -63,6 +63,10 @@
 		"./flat-json": {
 			"import": "./dist/esm/data/flat-json.js",
 			"require": "./dist/cjs/data/flat-json.js"
+		},
+		"./schema": {
+			"import": "./dist/esm/schema.js",
+			"require": "./dist/cjs/schema.js"
 		}
 	},
 	"typesVersions": {
